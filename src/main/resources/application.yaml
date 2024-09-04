@@ -1,0 +1,105 @@
+spring:
+  profiles:
+    active: default
+server:
+  port: 8090
+#  ssl:
+#    key-store-type: PKCS12
+#    key-store: ${SERVERSTORE_PATH:classpath:empirefx-mw-keystore.jks}
+#    key-store-password: ${SERVERSTORE_PASSWORD:empirefx-mw-keystore12}
+#    key-alias: empirefx-mw-keystore
+security:
+  require-ssl: false
+
+camel:
+  component:
+    http:
+      connect-timeout: "1000"
+      connection-request-timeout: "10000"
+      connections-per-route: "300"
+      max-total-connections: "2600"
+  rest:
+    component: servlet
+    port: ${server.port:8080}
+  servlet:
+    mapping:
+      context-path: ${API_PATH_VERSION:/api/v1/*}
+      enabled: true
+      servlet-name: CamelServlet
+  springboot:
+    jmx-enabled: true
+    main-run-controller: true
+    name: empirefx-get-fxbo-countries
+
+swagger:
+  api:
+    enableCors: true
+    path: /api
+  api-docs:
+    path: /api-docs
+    version: 1.0.0
+
+logging:
+  group:
+    tomcat: org.apache.catalina, org.apache.coyote, org.apache.tomcat
+  level:
+    root: ${LOGGING_LEVEL:info}
+    org.springframework.web: ${LOGGING_LEVEL:info}
+    org.apache.camel: ${LOGGING_LEVEL:info}
+    tomcat: ${LOGGING_LEVEL:info}
+    com.zenith: ${LOGGING_LEVEL:info}
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){yellow} %clr(%5p) %clr(${PID}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: info, health, metrics
+  security:
+    enabled: false
+  server:
+    port: 8090
+
+efx-values:
+  vasco:
+    cred: efx-dev-cred
+#  header-values:
+#    channelCode[0]: 101
+#    channelCode[1]: 102
+#    serviceCode: 1014
+#    serviceName: SendSMSOTP
+#    channelName: zenpay
+#    routeCode: 103
+#    routeName: zencore
+#    serviceMode: sync
+#    minorServiceVersion: 1.0
+
+atomic:
+  host: ${ATOMIC_HOST:demo.fxbackoffice.com}
+  method: GET
+  path: ${ATOMIC_PATH:/rest/dict/countries}
+  timeout: ${ATOMIC_TIMEOUT:3000}
+  protocol: ${ATOMIC_PROTOCOL:https}
+  uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
+  uri: ${atomic.protocol}://${atomic.host}${atomic.path}${atomic.uri-params}
+
+ehf:
+  host: ${EHF_HOST:localhost}
+  method: POST
+  path: /api/ehf/fetchKeys
+  port: ${EHF_PORT:8081}
+  protocol: ${EHF_PROTOCOL:http}
+  uri: ${ehf.protocol}://${ehf.host}:${ehf.port}${ehf.path}${ehf.uri-params}
+  uri-params: ?bridgeEndpoint=true&httpMethod=${ehf.method}&throwExceptionOnFailure=true
+
+
+vault-connector:
+  host: ${VAULT_HOST:localhost}
+  method: GET
+  path: /api/credentials/
+  port: ${VAULT_PORT:8083}
+  protocol: ${VAULT_PROTOCOL:http}
+  uri: ${vault-connector.protocol}://${vault-connector.host}:${vault-connector.port}${vault-connector.path}
+  uri-params: ?bridgeEndpoint=true&httpMethod=${vault-connector.method}&throwExceptionOnFailure=false
