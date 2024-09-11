@@ -18,26 +18,18 @@ public class StatusDetails implements Serializable {
     @Serial
     private static final long serialVersionUID = 6792584434564972167L;
 
-    @SerializedName("errorCode")
-    private Integer errorCode;
-    @SerializedName("errorMessage")
-    private String errorMessage;
-    @SerializedName("statusCode")
-    private String statusCode;
-    @SerializedName("ticketId")
-    private String ticketId;
+    @SerializedName("code")
+    private String code;
+    @SerializedName("name")
+    private String name;
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("errorCode=");
-        builder.append(errorCode);
-        builder.append(", errorMessage=");
-        builder.append(errorMessage);
-        builder.append(", statusCode=");
-        builder.append(statusCode);
-        builder.append(", ticketId=");
-        builder.append(ticketId);
+        builder.append("code=");
+        builder.append(code);
+        builder.append(", name=");
+        builder.append(name);
         return builder.toString();
     }
 }

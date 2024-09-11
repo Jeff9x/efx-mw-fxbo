@@ -17,25 +17,17 @@ public class ProviderApiResponse implements Serializable {
 
     private static final long serialVersionUID = -7437896624723346380L;
 
-    private String destination;
-    private Integer errorCode;
-    private String errorMessage;
-    private String status;
-    private String ticketId;
+    private String code;
+    private Integer name;
+
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("destination=");
-        builder.append(destination);
-        builder.append(", errorCode=");
-        builder.append(errorCode);
-        builder.append(", errorMessage=");
-        builder.append(errorMessage);
-        builder.append(", status=");
-        builder.append(status);
-        builder.append(", ticketId=");
-        builder.append(ticketId);
+        builder.append("code=");
+        builder.append(code);
+        builder.append(", name=");
+        builder.append(name);
         return builder.toString();
     }
 }

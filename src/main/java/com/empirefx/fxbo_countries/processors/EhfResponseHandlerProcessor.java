@@ -23,7 +23,7 @@ public class EhfResponseHandlerProcessor implements Processor {
 		EhfResponse ehFResponse = exchange.getIn().getBody(EhfResponse.class);
 
 		ResponsePayload responsePayload = new ResponsePayload();
-		responsePayload.setPrimaryData(requestWrapper.getRequestPayload().getPrimaryData());
+//		responsePayload.setPrimaryData(requestWrapper.getRequestPayload().getPrimaryData());
 
 
 		Item ehfItem = null;

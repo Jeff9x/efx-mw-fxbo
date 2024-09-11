@@ -43,14 +43,12 @@ public class SuccessResponseGeneratorProcessor implements Processor {
         ProviderApiResponse providerApiResponse = gson.fromJson(jsonRedisResponse, ProviderApiResponse.class);
 
         StatusDetails statusDetails = StatusDetails.builder()
-                .statusCode(providerApiResponse.getStatus())
-                .errorCode(providerApiResponse.getErrorCode())
-                .errorMessage(providerApiResponse.getErrorMessage())
-                .ticketId(providerApiResponse.getTicketId()).build();
+                .code(providerApiResponse.getCode())
+                .build();
 
         RequestWrapper originalRequestWrapper = exchange.getProperty(ORIGINAL_REQUEST, RequestWrapper.class);
         ResponsePayload responsePayload = ResponsePayload.builder()
-                .primaryData(originalRequestWrapper.getRequestPayload().getPrimaryData())
+//                .primaryData(originalRequestWrapper.getRequestPayload().getPrimaryData())
                 .status(statusDetails).build();
 
 
@@ -92,7 +90,7 @@ public class SuccessResponseGeneratorProcessor implements Processor {
         }
         exchange.setProperty(APP_REQUEST_TYPE, "Outgoing Response Data -- (To Caller): {}");
         exchange.setProperty(APP_REQUEST, AppLogger.builder()
-                .headerData(response.getHeader())
+//                .headerData(response.getHeader())
                 .payloadData(response.getResponsePayload())
                 .build());
     }

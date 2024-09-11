@@ -33,24 +33,24 @@ public class ValidateRequestProcessor implements Processor {
 
         RequestWrapper requestWrapper = exchange.getProperty(ORIGINAL_REQUEST, RequestWrapper.class);
 
-        boolean valid = validate(requestWrapper);
-        if (!valid) throw new DataValidationException();
-        exchange.setProperty("valid", valid);
+//        boolean valid = validate(requestWrapper);
+//        if (!valid) throw new DataValidationException();
+//        exchange.setProperty("valid", valid);
 
         exchange.getIn().setHeader(MESSAGE_ID_HEADER, exchange.getIn().getHeader(MESSAGE_ID_HEADER));
         exchange.getIn().setHeader(CONVERSATION_ID_HEADER, exchange.getIn().getHeader(CONVERSATION_ID_HEADER));
         exchange.getIn().setHeader(CALLER_IP, exchange.getIn().getHeader(CALLER_IP));
     }
 
-    private boolean validate(RequestWrapper requestWrapper) {
-        if (requestWrapper.getRequestPayload() == null || requestWrapper.getHeader() == null) {
-            return false;
-        }
-//        if (!validateHeader(requestWrapper.getHeader())) {
+//    private boolean validate(RequestWrapper requestWrapper) {
+//        if (requestWrapper.getRequestPayload() == null || requestWrapper.getHeader() == null) {
 //            return false;
 //        }
-        return validateBody(requestWrapper.getRequestPayload());
-    }
+////        if (!validateHeader(requestWrapper.getHeader())) {
+////            return false;
+////        }
+//        return validateBody(requestWrapper.getRequestPayload());
+//    }
 
 
 //    private boolean validateHeader(RequestHeader header) {
@@ -89,18 +89,6 @@ public class ValidateRequestProcessor implements Processor {
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid timestamp format: " + timestamp);
         }
-    }
-
-
-    private boolean validateBody(RequestPayload payload) {
-        return !(payload.getSms() == null ||
-                payload.getPrimaryData() == null ||
-                StringUtils.isEmpty(payload.getSms().getSender()) ||
-                StringUtils.isEmpty(payload.getSms().getSmsText()) ||
-                StringUtils.isEmpty(payload.getSms().getUnicode().toString()) ||
-                StringUtils.isEmpty(payload.getPrimaryData().getBusinessKey()) ||
-                StringUtils.isEmpty(payload.getPrimaryData().getBusinessKeyType())
-        );
     }
 
 

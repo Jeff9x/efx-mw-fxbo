@@ -38,34 +38,34 @@ public class ErrorHandlingProcessor implements Processor {
 
 		Exception exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
 		
-		RequestWrapper originalRequest = exchange.getProperty(ORIGINAL_REQUEST, RequestWrapper.class);
-
-		String routeCode = "";
-		String routeName = "";
-		String channelCode = "";
-		String channelName = "";
-		String messageID = "";
-		String conversationID = "";
-		String serviceName = "";
-		String serviceCode = "";
+//		RequestWrapper originalRequest = exchange.getProperty(ORIGINAL_REQUEST, RequestWrapper.class);
+//
+//		String routeCode = "";
+//		String routeName = "";
+//		String channelCode = "";
+//		String channelName = "";
+		String messageID = "Emmanuel";
+//		String conversationID = "";
+//		String serviceName = "";
+//		String serviceCode = "";
 
 		ResponseWrapper responseWrapper = new ResponseWrapper();
 		exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.INTERNAL_SERVER_ERROR.value());
 
-		if (null != originalRequest) {
-			ResponsePayload responsePayload = new ResponsePayload();
-
-			responsePayload.setPrimaryData(originalRequest.getRequestPayload().getPrimaryData());
-			responseWrapper.setResponsePayload(responsePayload);
-
-			routeCode = originalRequest.getHeader().getRouteCode();
-			routeName = originalRequest.getHeader().getRouteName();
-			channelCode = originalRequest.getHeader().getChannelCode();
-			channelName = originalRequest.getHeader().getChannelName();
-			messageID = originalRequest.getHeader().getMessageID();
-			serviceName = originalRequest.getHeader().getServiceName();
-			serviceCode = originalRequest.getHeader().getServiceCode();
-		}
+//		if (null != originalRequest) {
+//			ResponsePayload responsePayload = new ResponsePayload();
+//
+//			responsePayload.setPrimaryData(originalRequest.getRequestPayload().getPrimaryData());
+//			responseWrapper.setResponsePayload(responsePayload);
+//
+//			routeCode = originalRequest.getHeader().getRouteCode();
+//			routeName = originalRequest.getHeader().getRouteName();
+//			channelCode = originalRequest.getHeader().getChannelCode();
+//			channelName = originalRequest.getHeader().getChannelName();
+			messageID =  messageID;
+//			serviceName = originalRequest.getHeader().getServiceName();
+//			serviceCode = originalRequest.getHeader().getServiceCode();
+//		}
 
 		Item entry = null;
 		List<Item> listofItems = new ArrayList<>();
@@ -97,14 +97,14 @@ public class ErrorHandlingProcessor implements Processor {
 		header.setEhfInfo(ehfInfo);
 
 		header.setMessageID(messageID);
-		header.setConversationID(conversationID);
-		header.setTargetSystemID("NotAvailable");
-		header.setChannelCode(channelCode);
-		header.setChannelName(channelName);
-		header.setRouteCode(routeCode);
-		header.setRouteName(routeName);
-		header.setServiceCode(serviceCode);
-		header.setServiceName(serviceName);
+//		header.setConversationID(conversationID);
+//		header.setTargetSystemID("NotAvailable");
+//		header.setChannelCode(channelCode);
+//		header.setChannelName(channelName);
+//		header.setRouteCode(routeCode);
+//		header.setRouteName(routeName);
+//		header.setServiceCode(serviceCode);
+//		header.setServiceName(serviceName);
 		header.setConversationID(exchange.getIn().getHeader("conversationID", String.class));
 		responseWrapper.setHeader(header);
 		exchange.getIn().setBody(responseWrapper, ResponseWrapper.class);

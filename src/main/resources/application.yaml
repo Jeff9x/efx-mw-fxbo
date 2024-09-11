@@ -2,7 +2,8 @@ spring:
   profiles:
     active: default
 server:
-  port: 8090
+  port: 8080
+  address: localhost
 #  ssl:
 #    key-store-type: PKCS12
 #    key-store: ${SERVERSTORE_PATH:classpath:empirefx-mw-keystore.jks}
@@ -47,7 +48,7 @@ logging:
     org.springframework.web: ${LOGGING_LEVEL:info}
     org.apache.camel: ${LOGGING_LEVEL:info}
     tomcat: ${LOGGING_LEVEL:info}
-    com.zenith: ${LOGGING_LEVEL:info}
+    com.empirefx: ${LOGGING_LEVEL:info}
   pattern:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){yellow} %clr(%5p) %clr(${PID}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
 
@@ -60,8 +61,15 @@ management:
   security:
     enabled: false
   server:
-    port: 8090
+    port: 8080
+  address: localhost
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+#    virtual-host: /
 efx-values:
   vasco:
     cred: efx-dev-cred

@@ -55,8 +55,8 @@ public class ConstantsCommons {
 	public static final String WWW_AUTHENTICATE_HEADER_VALUE = "Basic realm=\"Access to MS Adapter Layer\"";
 	public static final String SERVICE_CODE = "serviceCode";
 
-	public static final String USER = "zenith-206";
-	public static final String PWAUTH = "zenith@123";
+	public static final String USER = "empire-206";
+	public static final String PWAUTH = "empire@123";
 	public static final String CALLER_IP_MESSAGE = "CALLER_IP_ADDRESS is ::[{}]";
 
 }

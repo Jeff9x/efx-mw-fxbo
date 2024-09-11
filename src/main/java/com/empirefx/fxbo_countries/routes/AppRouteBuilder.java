@@ -2,11 +2,18 @@ package com.empirefx.fxbo_countries.routes;
 
 
 import com.empirefx.fxbo_countries.commonlib.models.RequestWrapper;
+import com.empirefx.fxbo_countries.processors.LogAppLoggerProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+import static com.empirefx.fxbo_countries.commonlib.constants.ConstantsCommons.APP_REQUEST;
+import static com.empirefx.fxbo_countries.commonlib.enums.HTTPCommonHeadersEnum.CONTENT_TYPE;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 
 @Component
@@ -33,16 +40,30 @@ public class AppRouteBuilder extends RouteBuilder {
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Request :: {{atomic.uri}}")
                 .enrich().simple("{{atomic.uri}}").id("callServiceBack")
                 .log("Received response from external service: ${body}")
+                .setHeader(CONTENT_TYPE.getName(), constant(APPLICATION_JSON_VALUE))
+                .to("spring-rabbitmq:empirefx?queues=GetFXBO_Countries&routingKey=GetFXBO_Countries")
+        ;
+        from("spring-rabbitmq:empirefx?queues=GetFXBO_Countries&routingKey=GetFXBO_Countries")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Processed response with content type: ${header.Content-Type}")
-                .setBody(simple("${body}"))
+//                .setBody(simple("${body}"))
 //                .process("createResponseProcessor")
-                .log("${body}")
-                .convertBodyTo(String.class)
-                .unmarshal().json()
-                .log(LoggingLevel.INFO, "\n Empirefx FXBO Countries :: Response EHF :: Payload [${body}]")
-                .removeHeader("Authorization")
+                .log("Received message from RabbitMQ: ${body}")
+                .log("Original Headers: ${headers}")
+                // Remove all headers
+                .removeHeaders("*")
+                .log("Headers after removing all headers: ${headers}")
+//                .convertBodyTo(List.class)
+//                .unmarshal().json()
+//                .log(LoggingLevel.INFO, "\n Empirefx FXBO Countries :: Response EHF :: Payload [${body}]")
+//                .removeHeader("Authorization")
+//                .doTry()
+//                .process("successResponseGeneratorProcessor")
+//                .setProperty(APP_REQUEST,method(LogAppLoggerProcessor.class))
+//                .log("${body}")
+//                .convertBodyTo(String.class)
+//                .unmarshal().json()
 //                .doCatch(Exception.class)
 //                .setBody(constant("Error fetching countries"))
 //                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
@@ -50,6 +71,7 @@ public class AppRouteBuilder extends RouteBuilder {
 //                .log("Processed response with content type: ${header.Content-Type}")
 //                .setBody(simple("${body}"))
 //                .log("Error: ${exception.message}")
+
                 ;
 
 //        from("direct:begin").routeId("zenzngsendsmsotp.zenith.request.begin")

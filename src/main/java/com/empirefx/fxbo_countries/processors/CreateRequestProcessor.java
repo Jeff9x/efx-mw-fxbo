@@ -6,7 +6,6 @@ import com.empirefx.fxbo_countries.commonlib.constants.ConstantsCommons;
 import com.empirefx.fxbo_countries.commonlib.models.AppLogger;
 import com.empirefx.fxbo_countries.commonlib.models.RequestWrapper;
 import com.empirefx.fxbo_countries.models.provider.ProviderAccountDetails;
-import com.empirefx.fxbo_countries.models.provider.ProviderApiRequest;
 import com.empirefx.fxbo_countries.models.provider.ProviderSmsDetails;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -35,11 +34,6 @@ public class CreateRequestProcessor implements Processor {
 
         RequestWrapper requestWrapper = exchange.getProperty(ORIGINAL_REQUEST, RequestWrapper.class);
 
-        ProviderSmsDetails providerSmsDetails = ProviderSmsDetails.builder()
-                .dest(requestWrapper.getRequestPayload().getPrimaryData().getBusinessKey())
-                .src(requestWrapper.getRequestPayload().getSms().getSender())
-                .text(requestWrapper.getRequestPayload().getSms().getSmsText())
-                .unicode(requestWrapper.getRequestPayload().getSms().getUnicode()).build();
 
         String encryptedCred = providerCredentialsLocalCache.getPassword();
         String systemId  = "";
@@ -58,11 +52,6 @@ public class CreateRequestProcessor implements Processor {
                 .password(password)
                 .systemId(systemId).build();
 
-        ProviderApiRequest providerApiRequest = ProviderApiRequest.builder()
-                .sms(providerSmsDetails)
-                .account(providerAccountDetails).build();
-
-        exchange.getIn().setBody(providerApiRequest.toString());
 
 
         exchange.getIn().removeHeaders("Camel*");
