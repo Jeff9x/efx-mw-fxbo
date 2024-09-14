@@ -55,8 +55,10 @@ public class ConstantsCommons {
 	public static final String WWW_AUTHENTICATE_HEADER_VALUE = "Basic realm=\"Access to MS Adapter Layer\"";
 	public static final String SERVICE_CODE = "serviceCode";
 
-	public static final String USER = "empire-206";
-	public static final String PWAUTH = "empire@123";
-	public static final String CALLER_IP_MESSAGE = "CALLER_IP_ADDRESS is ::[{}]";
+	public static final String FXBO_AUTHORIZATION = "Authorization :";
+	public static final String FXBO_TOKEN = "Bearer 8700c43e5ca0a3f3393b09677ef4e07b2c4e97a82e859b5e278e0a3dbbd86cfbb52f478a6d756079a8476fdb476e1a53cc658b9eb147345b4a39c807";
+	public static final String FXBO_HTTPMETHODGET = "GET";
+	public static final String FXBO_HTTPMETHODPOST = "POST";
+	public static final String FXBO_CAMELHTTPMETHOD = "CamelHttpMethod";
 
 }

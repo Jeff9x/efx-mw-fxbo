@@ -17,7 +17,6 @@ public class RequestWrapper implements Serializable {
 
 	@JsonIgnore
 	private RequestHeader header;
-	private RequestPayload requestPayload;
 
 
 	@Override
@@ -25,8 +24,6 @@ public class RequestWrapper implements Serializable {
 		StringBuilder builder = new StringBuilder();
 		builder.append("RequestWrapper [header=");
 		builder.append(header);
-		builder.append(", requestPayload=");
-		builder.append(requestPayload);
 		builder.append("]");
 		return builder.toString();
 	}
