@@ -12,10 +12,11 @@ EXPOSE 8080
 WORKDIR /usr/src/app
 
 # Copy the JAR file to the container
-COPY target/empirefx-fxbo-countries-0.0.1-SNAPSHOT.jar /usr/src/app/empirefx-fxbo-countries-0.0.1-SNAPSHOT.jar
+COPY target/empirefx-fxbo-0.0.1-SNAPSHOT.jar /usr/src/app/empirefx-fxbo-0.0.1-SNAPSHOT.jar
 
 # Set environment variables (optional)
 ENV JAVA_OPTS=""
 
 # Command to run the JAR file
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /usr/src/app/empirefx-fxbo-countries-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /usr/src/app/empirefx-fxbo-0.0.1-SNAPSHOT.jar"]
+

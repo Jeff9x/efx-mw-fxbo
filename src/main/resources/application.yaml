@@ -3,7 +3,7 @@ spring:
     active: default
 server:
   port: 8080
-  address: localhost
+  address: 0.0.0.0
 #  ssl:
 #    key-store-type: PKCS12
 #    key-store: ${SERVERSTORE_PATH:classpath:empirefx-mw-keystore.jks}
@@ -30,7 +30,7 @@ camel:
   springboot:
     jmx-enabled: true
     main-run-controller: true
-    name: empirefx-get-fxbo-countries
+    name: empirefx-fxbo
 
 swagger:
   api:
@@ -62,13 +62,13 @@ management:
     enabled: false
   server:
     port: 8080
-  address: localhost
+#    address: 0.0.0.0
 
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: guest
+#    password: guest
 #    virtual-host: /
 efx-values:
   vasco:
@@ -92,6 +92,15 @@ atomic:
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
   uri: ${atomic.protocol}://${atomic.host}${atomic.path}${atomic.uri-params}
+
+atomic1:
+  host: ${ATOMIC_HOST:demo.fxbackoffice.com}
+  method: POST
+  path: ${ATOMIC_PATH:/rest/accounts}
+  timeout: ${ATOMIC_TIMEOUT:3000}
+  protocol: ${ATOMIC_PROTOCOL:https}
+  uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
+  uri: ${atomic1.protocol}://${atomic1.host}${atomic1.path}${atomic1.uri-params}
 
 ehf:
   host: ${EHF_HOST:localhost}

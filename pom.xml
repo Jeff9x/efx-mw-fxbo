@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.empirefx.fxbo_countries</groupId>
-	<artifactId>empirefx-fxbo-countries</artifactId>
+	<groupId>com.empirefx.fxbo</groupId>
+	<artifactId>empirefx-fxbo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>empirefx-get-fxbo-countries</name>
-	<description>EmpireFX Get A List Of FXBO Countries</description>
+	<name>empirefx-fxbo</name>
+	<description>EmpireFX Endpoints</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
