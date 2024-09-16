@@ -29,8 +29,8 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
 
         from("direct:fetchCountries").routeId("com.empirefx.request.dispatchRequest")
                 .noStreamCaching().noMessageHistory().noTracing()
-                .setHeader("{{adaptive.camelHttpMethod}}", constant("{{adaptive.method}}"))
-                .setHeader("{{adaptive.authorization}}", constant("{{adaptive.token}}"))  // Set Authorization header
+                .process("headersSetterProcessor")
+                .removeHeaders("*", "Authorization")// Set Authorization header
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Request :: {{atomic.uri}}")
                 .enrich().simple("{{atomic.uri}}").id("callServiceBack")
@@ -44,8 +44,7 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
                 .removeHeaders("*")
                 .removeHeader("Authorization")
                 .doTry()
-                .convertBodyTo(String.class)
-                .unmarshal().json()
-                .setBody(simple("${body}"));
+                .process("countryResponseProcessor")
+        ;
     }
 }

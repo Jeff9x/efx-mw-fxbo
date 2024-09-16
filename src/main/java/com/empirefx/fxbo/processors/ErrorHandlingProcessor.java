@@ -1,6 +1,6 @@
 package com.empirefx.fxbo.processors;
 
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+//import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import com.empirefx.fxbo.commonlib.exceptions.DataValidationException;
 import com.empirefx.fxbo.commonlib.exceptions.SystemUnavailableException;
@@ -35,42 +35,19 @@ public class ErrorHandlingProcessor implements Processor {
 	public void process(Exchange exchange) throws Exception {
 
 		Exception exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
-		
-//		RequestWrapper originalRequest = exchange.getProperty(ORIGINAL_REQUEST, RequestWrapper.class);
-//
-//		String routeCode = "";
-//		String routeName = "";
-//		String channelCode = "";
-//		String channelName = "";
+
 		String messageID = "Emmanuel";
-//		String conversationID = "";
-//		String serviceName = "";
-//		String serviceCode = "";
 
 		ResponseWrapper responseWrapper = new ResponseWrapper();
 		exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.INTERNAL_SERVER_ERROR.value());
 
-//		if (null != originalRequest) {
-//			ResponsePayload responsePayload = new ResponsePayload();
-//
-//			responsePayload.setPrimaryData(originalRequest.getRequestPayload().getPrimaryData());
-//			responseWrapper.setResponsePayload(responsePayload);
-//
-//			routeCode = originalRequest.getHeader().getRouteCode();
-//			routeName = originalRequest.getHeader().getRouteName();
-//			channelCode = originalRequest.getHeader().getChannelCode();
-//			channelName = originalRequest.getHeader().getChannelName();
-			messageID =  messageID;
-//			serviceName = originalRequest.getHeader().getServiceName();
-//			serviceCode = originalRequest.getHeader().getServiceCode();
-//		}
 
 		Item entry = null;
 		List<Item> listofItems = new ArrayList<>();
 
 		EhfInfo ehfInfo = new EhfInfo();
 
-		if (exception instanceof DataValidationException || exception instanceof UnrecognizedPropertyException
+		if (exception instanceof DataValidationException
 				|| exception instanceof ValidationException || exception instanceof JsonValidationException) {
 			entry = new Item();
 			entry.setEhfDesc(EHF1014.getMessage());
@@ -95,15 +72,6 @@ public class ErrorHandlingProcessor implements Processor {
 		header.setEhfInfo(ehfInfo);
 
 		header.setMessageID(messageID);
-//		header.setConversationID(conversationID);
-//		header.setTargetSystemID("NotAvailable");
-//		header.setChannelCode(channelCode);
-//		header.setChannelName(channelName);
-//		header.setRouteCode(routeCode);
-//		header.setRouteName(routeName);
-//		header.setServiceCode(serviceCode);
-//		header.setServiceName(serviceName);
-		header.setConversationID(exchange.getIn().getHeader("conversationID", String.class));
 		responseWrapper.setHeader(header);
 		exchange.getIn().setBody(responseWrapper, ResponseWrapper.class);
 		exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);

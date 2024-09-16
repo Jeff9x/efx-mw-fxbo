@@ -26,21 +26,16 @@ public class HeadersSetterProcessor implements Processor {
 	private String getCamelHttpMethod;
 	@Override
 	public void process(Exchange exchange) throws Exception {
-		System.out.println(authorization);
-		System.out.println(token);
-		System.out.println(camelHttpMethod);
-		System.out.println(getCamelHttpMethod);
 		// Get Caller IP
 		HttpServletRequest request = exchange.getIn().getBody(HttpServletRequest.class);
 
 		String ipRemote = Objects.isNull(request) ? EMPTY : request.getRemoteAddr();
 
+		// Set the Bearer token in the Authorization header
 		exchange.getIn().setHeader(CALLER_IP, ipRemote);
-		exchange.getIn().setHeader(authorization+":", constant(token));
-		exchange.getIn().setHeader(getCamelHttpMethod, constant(camelHttpMethod));
-		exchange.setProperty(APP_REQUEST_TYPE, "Incoming Request Data ------- (From Caller): {}");
-		exchange.setProperty(APP_REQUEST, AppLogger.builder()
-				.build());
+		exchange.getIn().setHeader("Authorization", token);
+
+		System.out.println("Incoming Caller IP :"+ipRemote);
 	}
 
 
