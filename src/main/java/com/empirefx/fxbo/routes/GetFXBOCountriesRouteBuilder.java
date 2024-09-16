@@ -44,7 +44,6 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
                 .removeHeaders("*")
                 .removeHeader("Authorization")
                 .doTry()
-                .process("countryResponseProcessor")
-        ;
+                .process("countryResponseProcessor");
     }
 }

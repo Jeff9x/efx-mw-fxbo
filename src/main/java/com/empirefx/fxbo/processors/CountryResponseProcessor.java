@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.empirefx.fxbo.commonlib.constants.ConstantsCommons.APP_REQUEST_TYPE;
-
 
 @Component
 public class CountryResponseProcessor implements Processor {
