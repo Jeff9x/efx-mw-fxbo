@@ -11,7 +11,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 
 @Component
-public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
+public class CreateFXBOCreateAccountRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -22,28 +22,30 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
 //                .process("errorHandlingProcessor");
 
         rest()
-                .get("/utility/countries")
+                .post("/trading-accounts")
                 .description("Adapter REST Service")
+                .consumes(APPLICATION_JSON_VALUE)
                 .produces("application/json")
-                .to("direct:fetchCountries");
+                .to("direct:createAccount");
 
-        from("direct:fetchCountries").routeId("com.empirefx.request.getcountries")
-                .noStreamCaching().noMessageHistory().noTracing()
-                .process("headersSetterProcessor")
-                .removeHeaders("*", "Authorization")// Set Authorization header
+        from("direct:createAccount").routeId("com.empirefx.request.dispatchRequest1")
+                .setHeader("Content-Type", constant("application/json"))
+                .setHeader("Accept", constant("application/json"))
+                .convertBodyTo(String.class)
+                .marshal().json()
                 .doTry()
-                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Request :: {{atomic.uri}}")
-                .enrich().simple("{{atomic.uri}}").id("callServiceBack")
-                .setHeader(CONTENT_TYPE.getName(), constant(APPLICATION_JSON_VALUE))
-                .to("direct:fetchCountriesResponse");
-
-        from("direct:fetchCountriesResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Account Request :: {{atomic1.uri}}")
+                .enrich().simple("{{atomic1.uri}}").id("callServiceBack1")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to("direct:fetchAccountsResponse");
+
+        from("direct:fetchAccountsResponse")
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
+                .setBody(simple("${body}"))
                 .removeHeaders("*")
                 .removeHeader("Authorization")
                 .doTry()
-                .process("countryResponseProcessor");
+                .process("userResponseProcessor");
     }
 }
