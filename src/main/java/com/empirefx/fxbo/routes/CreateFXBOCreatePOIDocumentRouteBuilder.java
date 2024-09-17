@@ -1,6 +1,5 @@
 package com.empirefx.fxbo.routes;
 
-
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.ValidationException;
@@ -9,9 +8,8 @@ import org.springframework.stereotype.Component;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
-
 @Component
-public class CreateFXBOCreateAccountRouteBuilder extends RouteBuilder {
+public class CreateFXBOCreatePOIDocumentRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -23,32 +21,34 @@ public class CreateFXBOCreateAccountRouteBuilder extends RouteBuilder {
                 .setBody(simple("Validation failed: ${exception.message}"));
 
         rest()
-                .post("/trading-accounts")
+                .post("/upload-poi-document")
                 .description("Adapter REST Service")
                 .consumes(APPLICATION_JSON_VALUE)
                 .produces("application/json")
-                .to("direct:createAccount");
+                .to("direct:createPOIDocument");
 
-        from("direct:createAccount").routeId("com.empirefx.request.dispatchRequest1")
+        from("direct:createPOIDocument").routeId("com.empirefx.request.dispatchRequest2")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
                 .process("headersSetterProcessor")
                 .convertBodyTo(String.class)
                 .marshal().json()
-//                .process("userRequestValidationProcessor")
                 .doTry()
-                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Account Request :: {{atomic1.uri}}")
-                .enrich().simple("{{atomic1.uri}}").id("callServiceBack1")
+                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Upload POI Request :: {{atomic1.uriPOI}}")
+                .enrich().simple("{{atomic1.uriPOI}}").id("callServiceBack2")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .to("direct:fetchAccountsResponse");
+                .to("direct:fetchPOIResponse");
 
-        from("direct:fetchAccountsResponse")
+        from("direct:fetchPOIResponse")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
                 .removeHeaders("*")
                 .removeHeader("Authorization")
                 .doTry()
-                .process("userResponseProcessor");
+                .setBody(simple("${body}"))
+                .convertBodyTo(String.class)
+                .unmarshal().json()
+                .end();
     }
 }

@@ -109,7 +109,7 @@ atomic1:
   host: ${ATOMIC_HOST:demo.fxbackoffice.com}
   method: POST
   path: ${ATOMIC_PATH:/rest/accounts}
-  pathPOI: ${ATOMIC_PATH:/rest/accounts}
+  pathPOI: ${ATOMIC_PATH:/rest/documents}
   timeout: ${ATOMIC_TIMEOUT:3000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}

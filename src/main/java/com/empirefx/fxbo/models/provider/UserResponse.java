@@ -1,5 +1,4 @@
 package com.empirefx.fxbo.models.provider;
-import java.util.Date;
 
 public class UserResponse {
     private String login;
