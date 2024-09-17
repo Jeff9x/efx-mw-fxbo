@@ -7,26 +7,10 @@ public class UserRequest {
     private String sid;
     private String groupName;
     private int leverage;
-    private int initialBalance;
+    private double initialBalance;
     private boolean notifyDisable;
     private boolean readOnly;
-    private Map<String, String> customFields;
-
-    // Constructors, Getters, and Setters
-
-    public UserRequest() {}
-
-    public UserRequest(int user, String password, String sid, String groupName, int leverage, int initialBalance, boolean notifyDisable, boolean readOnly, Map<String, String> customFields) {
-        this.user = user;
-        this.password = password;
-        this.sid = sid;
-        this.groupName = groupName;
-        this.leverage = leverage;
-        this.initialBalance = initialBalance;
-        this.notifyDisable = notifyDisable;
-        this.readOnly = readOnly;
-        this.customFields = customFields;
-    }
+//    private Map<String, String> customFields;
 
     // Getters and Setters
     public int getUser() {
@@ -69,11 +53,11 @@ public class UserRequest {
         this.leverage = leverage;
     }
 
-    public int getInitialBalance() {
+    public double getInitialBalance() {
         return initialBalance;
     }
 
-    public void setInitialBalance(int initialBalance) {
+    public void setInitialBalance(double initialBalance) {
         this.initialBalance = initialBalance;
     }
 
@@ -93,13 +77,13 @@ public class UserRequest {
         this.readOnly = readOnly;
     }
 
-    public Map<String, String> getCustomFields() {
-        return customFields;
-    }
-
-    public void setCustomFields(Map<String, String> customFields) {
-        this.customFields = customFields;
-    }
+//    public Map<String, String> getCustomFields() {
+//        return customFields;
+//    }
+//
+//    public void setCustomFields(Map<String, String> customFields) {
+//        this.customFields = customFields;
+//    }
 
     @Override
     public String toString() {
@@ -112,7 +96,7 @@ public class UserRequest {
                 ", initialBalance=" + initialBalance +
                 ", notifyDisable=" + notifyDisable +
                 ", readOnly=" + readOnly +
-                ", customFields=" + customFields +
+//                ", customFields=" + customFields +
                 '}';
     }
 }

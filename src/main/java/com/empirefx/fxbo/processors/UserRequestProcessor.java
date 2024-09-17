@@ -3,6 +3,7 @@ import com.empirefx.fxbo.models.provider.UserRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.ValidationException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,21 +13,18 @@ public class UserRequestProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        // Get the request body as a String
-        String body = exchange.getIn().getBody(String.class);
+        // Get the JSON body as a String
+        String jsonBody = exchange.getIn().getBody(String.class);
 
-        // Deserialize the request body to a UserRequest object
-        UserRequest userRequest = objectMapper.readValue(body, UserRequest.class);
+        System.out.println("incoming payload"+jsonBody);
 
-        // Log the incoming request
-        System.out.println("Received UserRequest: " + userRequest);
+        // Convert the JSON to a UserRequest object
+        UserRequest userRequest = objectMapper.readValue(jsonBody, UserRequest.class);
 
-        // You can process the userRequest object, for example:
-        if (userRequest.getLeverage() > 100) {
-            System.out.println("High leverage detected: " + userRequest.getLeverage());
-        }
+        // Log the received request for debugging
+        System.out.println("Request received: " + userRequest);
 
-        // Optionally, you can set the processed request back into the exchange
+        // Set the UserRequest object in the exchange body for further processing
         exchange.getIn().setBody(userRequest);
     }
 }
