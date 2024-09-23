@@ -1,15 +1,16 @@
 package com.empirefx.fxbo.routes;
 
+import com.empirefx.fxbo.commonlib.exceptions.UnsuccessfullException;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @Component
-public class CreateFXBOUserAccountRouteBuilder extends RouteBuilder {
+public class CreateFXBOUserCreateAccountRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -21,29 +22,28 @@ public class CreateFXBOUserAccountRouteBuilder extends RouteBuilder {
                 .setBody(simple("Validation failed: ${exception.message}"));
 
         rest()
-                .post("/create-user")
+                .post("/create-user-account")
                 .description("Adapter REST Service")
                 .consumes(APPLICATION_JSON_VALUE)
                 .produces("application/json")
                 .to("direct:createUserAccount");
 
-        from("direct:createUserAccount").routeId("com.empirefx.request.dispatchRequest3")
+        from("direct:createUserAccount").routeId("com.empirefx.request.dispatchRequest5")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
-                .process("headersSetterProcessor")
-                .convertBodyTo(String.class)
-                .marshal().json()
-//                .process("userRequestValidationProcessor")
+                .process("createUserAccountHeadersSetterProcessor")
+                .process("clientRequestProcessor")
                 .doTry()
-                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create User Account Request :: {{atomic1.uriUser}}")
-                .enrich().simple("{{atomic1.uriUser}}").id("callServiceBack3")
-                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Account Request :: {{atomic1.uriUser}}")
+                .enrich().simple("{{atomic1.uriUser}}").id("createUserAccount5")
+//                .convertBodyTo(String.class)
                 .to("direct:fetchUserAccountsResponse");
 
         from("direct:fetchUserAccountsResponse")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
-                .log("Processed response with content type: ${header.Content-Type}")
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log("Incoming response: ${body}")
                 .removeHeaders("*")
                 .removeHeader("Authorization")
                 .doTry()

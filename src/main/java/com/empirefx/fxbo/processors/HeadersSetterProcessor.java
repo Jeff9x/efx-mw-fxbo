@@ -34,6 +34,7 @@ public class HeadersSetterProcessor implements Processor {
 		// Set the Bearer token in the Authorization header
 		exchange.getIn().setHeader(CALLER_IP, ipRemote);
 		exchange.getIn().setHeader("Authorization", token);
+		System.out.println("Authorization Header Set:");
 
 		System.out.println("Incoming Caller IP :"+ipRemote);
 	}
