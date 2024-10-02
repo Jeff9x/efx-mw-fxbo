@@ -81,7 +81,7 @@ jobs:
       - name: Scale down deployment
         run: |
             kubectl scale deployment efx-mw-fxbo --replicas=0 -n backend-services
-            kubectl wait --for=delete pod -l app=keycloak -n backend-services --timeout=120s
+            kubectl wait --for=delete pod -l app=efx-mw-fxbo -n backend-services --timeout=120s
   
       - name: Update Kubernetes deployment
         run: |
@@ -94,4 +94,4 @@ jobs:
   
       - name: Check deployment status
         run: |
-            kubectl get pods -n backend-services -l app=keycloak
+            kubectl get pods -n backend-services -l app=efx-mw-fxbo
