@@ -20,20 +20,6 @@ import java.util.List;
 @Component
 public class AppTokenJava {
 
-    String encodeFront;
-    String encodeBack;
-    int config;
-    int user;
-    String status;
-    String expiresAt;
-    String documentNumber;
-    String type;
-    String countryOfIssue;
-    String frontFile;
-    String frontName;
-    String backFile;
-    String backName;
-    boolean uploadedByClient;
 
 
 //    // Helper method to encode a file to Base64 string
@@ -93,4 +79,41 @@ public class AppTokenJava {
 
         }
 
+
+
+public static String toStringPoa (String config,String user,String status,String type,String address, String postal_code, String country,
+                               String backFile ,String backName, String uploadedByClient)throws IOException {
+    // Method to construct the payload
+    // Create a StringBuilder to build the payload
+    StringBuilder builder = new StringBuilder();
+
+    // Start building the JSON payload
+    builder.append("{\n");
+    builder.append("    \"config\": ").append(config).append(",\n");
+    builder.append("    \"user\": ").append(user).append(",\n");
+    builder.append("    \"status\": \"").append(status).append("\",\n");
+    builder.append("    \"data\": {\n");
+    builder.append("        \"type\": \"").append(type).append("\",\n");
+    builder.append("        \"address\": \"").append(address).append("\",\n");
+    builder.append("        \"postal_code\": \"").append(postal_code).append("\",\n");
+    builder.append("        \"country\": \"").append(country).append("\",\n");
+
+    // Append back_side array
+    builder.append("        \"file\": [\n");
+    builder.append("            {\n");
+    builder.append("                \"file\": \"").append(backFile).append("\",\n");
+    builder.append("                \"name\": \"").append(backName).append("\"\n");
+    builder.append("            }\n");
+    builder.append("        ]\n");
+    builder.append("    },\n");
+
+    // Append uploadedByClient field
+    builder.append("    \"uploadedByClient\": ").append(uploadedByClient).append("\n");
+    builder.append("}");
+//            System.out.println("String backend"+builder);
+
+    return builder.toString();
     }
+}
+
+
