@@ -1,4 +1,4 @@
-name: Build JAR and Docker Image
+name: efx-mw-fxbo-dev
 
 on:
   pull_request:
@@ -57,5 +57,41 @@ jobs:
             --tag ${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/${IMAGE_NAME}:${{ github.sha }} \
             --tag ${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/${IMAGE_NAME}:latest \
             .
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
+      - name: Save DigitalOcean kubeconfig
+        run: |
+          doctl kubernetes cluster kubeconfig save efx-be
+
+      - name: Patch deployment
+        run: |
+            kubectl patch deployment efx-mw-fxbo -n backend-services -p '{"spec":{"template":{"metadata":{"annotations":{"kubectl.kubernetes.io/restartedAt":"'$(date +%s)'"}}}}}'
+  
+      - name: Scale down deployment
+        run: |
+            kubectl scale deployment efx-mw-fxbo --replicas=0 -n backend-services
+            kubectl wait --for=delete pod -l app=keycloak -n backend-services --timeout=120s
+  
+      - name: Update Kubernetes deployment
+        run: |
+            kubectl set image deployment/efx-mw-fxbo efx-mw-fxbo=registry.digitalocean.com/efx-registry/efx-mw-fxbo-dev:latest -n backend-services
+
+      - name: Scale up deployment
+        run: |
+            kubectl scale deployment efx-mw-fxbo --replicas=1 -n backend-services
+            kubectl rollout status deployment/efx-mw-fxbo -n backend-services --timeout=300s
+  
+      - name: Check deployment status
+        run: |
+            kubectl get pods -n backend-services -l app=keycloak
