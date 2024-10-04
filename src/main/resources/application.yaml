@@ -2,7 +2,7 @@ spring:
   profiles:
     active: default
 server:
-  port: 8080
+  port: 8082
   address: 0.0.0.0
 #  ssl:
 #    key-store-type: PKCS12
@@ -21,7 +21,7 @@ camel:
       max-total-connections: "2600"
   rest:
     component: servlet
-    port: ${server.port:8080}
+    port: ${server.port:8082}
   servlet:
     mapping:
       context-path: ${API_PATH_VERSION:/api/v1/*}
@@ -61,7 +61,7 @@ management:
   security:
     enabled: false
   server:
-    port: 8080
+    port: 8082
 #    address: 0.0.0.0
 
 #  rabbitmq:
