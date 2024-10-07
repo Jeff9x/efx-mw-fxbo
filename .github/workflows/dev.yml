@@ -85,6 +85,22 @@ jobs:
   
       - name: Update Kubernetes deployment
         run: |
+                kubectl set image deployment/efx-mw-fxbo efx-mw-fxbo=registry.digitalocean.com/efx-registry/efx-mw-fxbo-dev:latest -n backend-services
+
+      - name: Create and Apply Realm ConfigMap
+        run: |
+              kubectl create configmap efx-mw-fxbo-config \
+                --from-file=src/main/resources/ \
+                -n backend-services \
+                -o yaml \
+                --dry-run=client | kubectl apply -f -
+    
+      - name: Verify ConfigMap
+        run: |
+              kubectl get configmap efx-mw-fxbo-config -n backend-services -o yaml
+
+      - name: Update Kubernetes deployment
+        run: |
             kubectl set image deployment/efx-mw-fxbo efx-mw-fxbo=registry.digitalocean.com/efx-registry/efx-mw-fxbo-dev:latest -n backend-services
 
       - name: Scale up deployment
