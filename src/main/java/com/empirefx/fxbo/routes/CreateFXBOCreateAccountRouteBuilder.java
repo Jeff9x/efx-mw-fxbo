@@ -11,6 +11,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 
 @Component
+//@EnableSwagger2
 public class CreateFXBOCreateAccountRouteBuilder extends RouteBuilder {
 
     @Override

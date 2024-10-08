@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: default
+springdoc:
+  api-docs:
+    path: /api-docs
 server:
   port: 8082
   address: 0.0.0.0
@@ -139,3 +142,10 @@ vault-connector:
   protocol: ${VAULT_PROTOCOL:http}
   uri: ${vault-connector.protocol}://${vault-connector.host}:${vault-connector.port}${vault-connector.path}
   uri-params: ?bridgeEndpoint=true&httpMethod=${vault-connector.method}&throwExceptionOnFailure=false
+#  use-management-port: true
+
+
+
+
+
+
