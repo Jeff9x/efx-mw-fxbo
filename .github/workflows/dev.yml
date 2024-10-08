@@ -87,7 +87,7 @@ jobs:
         run: |
                 kubectl set image deployment/efx-mw-fxbo efx-mw-fxbo=registry.digitalocean.com/efx-registry/efx-mw-fxbo-dev:latest -n backend-services
 
-      - name: Create and Apply Realm ConfigMap
+      - name: Create and Apply Configs
         run: |
               kubectl create configmap efx-mw-fxbo-config \
                 --from-file=src/main/resources/ \
