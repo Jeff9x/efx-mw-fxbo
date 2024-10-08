@@ -11,7 +11,8 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 
 @Component
-public class CreateFXBOCreateAccountRouteBuilder extends RouteBuilder {
+//@EnableSwagger2
+public class CreateFXBOCreateTradingAccountRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -27,28 +28,27 @@ public class CreateFXBOCreateAccountRouteBuilder extends RouteBuilder {
                 .description("Adapter REST Service")
                 .consumes(APPLICATION_JSON_VALUE)
                 .produces("application/json")
-                .to("direct:createAccount");
+                .to("direct:createTradingAccount");
 
-        from("direct:createAccount").routeId("com.empirefx.request.dispatchRequest1")
+        from("direct:createTradingAccount").routeId("com.empirefx.request.dispatchRequest100")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
-                .process("headersSetterProcessor")
-                .convertBodyTo(String.class)
+                .process("createTradingAccountHeadersSetterProcessor")
                 .marshal().json()
-//                .process("userRequestValidationProcessor")
                 .doTry()
-                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Account Request :: {{atomic1.uri}}")
-                .enrich().simple("{{atomic1.uri}}").id("callServiceBack1")
+                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Trading Account Request :: {{atomic.uriAccount}}")
+                .enrich().simple("{{atomic.uriAccount}}").id("callServiceBack100")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .to("direct:fetchAccountsResponse");
+                .to("direct:fetchTradingAccountResponse");
 
-        from("direct:fetchAccountsResponse")
+        from("direct:fetchTradingAccountResponse")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
-                .removeHeaders("*")
-                .removeHeader("Authorization")
-                .doTry()
-                .process("userResponseProcessor");
+                .setBody(simple("${body}"))
+                .log("Response body: ${body}")
+                .convertBodyTo(String.class)
+                .unmarshal().json()
+                .end();
     }
 }

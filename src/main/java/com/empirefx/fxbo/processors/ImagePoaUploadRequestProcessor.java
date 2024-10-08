@@ -1,35 +1,31 @@
 package com.empirefx.fxbo.processors;
+
 import com.empirefx.fxbo.models.provider.AppTokenJava;
-import com.empirefx.fxbo.models.provider.Data;
-import com.empirefx.fxbo.models.provider.DocumentResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
-public class ImageUploadRequestProcessor implements Processor {
+public class ImagePoaUploadRequestProcessor implements Processor {
 
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMappers;
 
-    public ImageUploadRequestProcessor(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    private ImagePoaUploadRequestProcessor(ObjectMapper objectMapper) {
+        this.objectMappers = objectMapper;
     }
     String encodeFront;
     String encodeBack;
     String config;
     String user;
     String status;
-    String expiresAt;
-    String documentNumber;
     String type;
-    String countryOfIssue;
-    String frontFile;
-    String frontName;
+    String address;
+    String postal_code;
+    String country;
     String backFile;
     String backName;
     boolean uploadedByClient;
@@ -60,32 +56,18 @@ public class ImageUploadRequestProcessor implements Processor {
         JSONObject dataObject = jsonObject.getJSONObject("data");
         System.out.println("Incoming Data: " + dataObject);
 
-        expiresAt = String.valueOf(dataObject.get("expires_at"));
-        System.out.println("Incoming expiresAt: " + expiresAt);
-        countryOfIssue = String.valueOf(dataObject.get("country_of_issue"));
-        System.out.println("Incoming countryOfIssue: " + countryOfIssue);
-        documentNumber = String.valueOf(dataObject.get("document_number"));
-        System.out.println("Incoming documentNumber: " + documentNumber);
+        address = String.valueOf(dataObject.get("address"));
+        System.out.println("Incoming address: " + address);
+        postal_code = String.valueOf(dataObject.get("postal_code"));
+        System.out.println("Incoming postal_code: " + postal_code);
+        country = String.valueOf(dataObject.get("country"));
+        System.out.println("Incoming country: " + country);
         type = String.valueOf(dataObject.get("type"));
         System.out.println("Incoming type: " + type);
 
-        JSONArray frontSideArray = dataObject.getJSONArray("front_side");
-        System.out.println("Incoming Front Side: " + frontSideArray);
-        JSONArray backSideArray = dataObject.getJSONArray("back_side");
+        JSONArray backSideArray = dataObject.getJSONArray("file");
         System.out.println("Incoming Back Side: " + backSideArray);
 
-        for (int i = 0; i < frontSideArray.length(); i++)
-        {
-            JSONObject fileObject = frontSideArray.getJSONObject(i);
-
-            String filePath = fileObject.getString("file");
-            String fileName = fileObject.getString("name");
-
-            frontFile = AppTokenJava.encodeFileToBase64(filePath);
-            frontName = fileName;
-
-        }
-//        System.out.println("Incoming Front Side Encoded: " + encodeFront);
 
         for (int i = 0; i < backSideArray.length(); i++)
         {
@@ -103,8 +85,8 @@ public class ImageUploadRequestProcessor implements Processor {
         // Optionally: log the updated request
 //        System.out.println("Processed Request: " + requestBody);
 
-        String finalPayload = AppTokenJava.toString(config,user,status,expiresAt,documentNumber,type, countryOfIssue,
-                 frontFile,  frontName, backFile , backName, String.valueOf(uploadedByClient));
+        String finalPayload = AppTokenJava.toStringPoa(config,user,status,type, address,
+                postal_code,  country, backFile , backName, String.valueOf(uploadedByClient));
 
         System.out.println("finalpayload"+finalPayload);
 

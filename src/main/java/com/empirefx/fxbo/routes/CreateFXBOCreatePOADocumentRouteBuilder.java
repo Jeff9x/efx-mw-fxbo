@@ -1,4 +1,5 @@
 package com.empirefx.fxbo.routes;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.ValidationException;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Component
-public class UpdateFXBOUserAccountRouteBuilder extends RouteBuilder {
+public class CreateFXBOCreatePOADocumentRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -20,27 +21,31 @@ public class UpdateFXBOUserAccountRouteBuilder extends RouteBuilder {
                 .setBody(simple("Validation failed: ${exception.message}"));
 
         rest()
-                .post("/update-user")
+                .post("/upload-poa-document")
                 .description("Adapter REST Service")
                 .consumes(APPLICATION_JSON_VALUE)
                 .produces("application/json")
-                .to("direct:updateUserAccount");
+                .to("direct:createPOADocument");
 
-        from("direct:updateUserAccount").routeId("com.empirefx.request.dispatchRequest4")
+        from("direct:createPOADocument").routeId("com.empirefx.request.dispatchRequest20")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
                 .process("headersSetterProcessor")
-                .marshal().json()
+                .process("imagePoaUploadRequestProcessor")
                 .doTry()
-                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Update User Account Request :: {{atomic1.uriUpdateUser}}")
-                .enrich().simple("{{atomic1.uriUpdateUser}}").id("callServiceBack4")
+//                .log("Processed request To Backend : ${body}")
+                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Upload POA Request :: {{atomic1.uriPOI}}")
+                .enrich().simple("{{atomic1.uriPOI}}").id("callServiceBack20")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .to("direct:fetchUpdateUserAccountsResponse");
+                .to("direct:fetchPOAResponse");
 
-        from("direct:fetchUpdateUserAccountsResponse")
+        from("direct:fetchPOAResponse")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
+//                .log("Processed response : ${body}")
+                .removeHeaders("*")
+                .removeHeader("Authorization")
                 .doTry()
                 .setBody(simple("${body}"))
                 .convertBodyTo(String.class)
