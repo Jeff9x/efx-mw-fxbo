@@ -105,12 +105,14 @@ atomic:
   method2: POST
   path: ${ATOMIC_PATH:/rest/dict/countries}
   pathAccount: ${ATOMIC_PATH:/rest/accounts/new}
+  pathTradingAccounts: ${ATOMIC_PATH:/rest/accounts}
   timeout: ${ATOMIC_TIMEOUT:3000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
-  uri-paramsAccount: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method2}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
+  uri-paramsAccount: ?version=1.0.0&_locale=en&?bridgeEndpoint=false&httpMethod=${atomic.method2}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
   uri: ${atomic.protocol}://${atomic.host}${atomic.path}${atomic.uri-params}
   uriAccount: ${atomic.protocol}://${atomic.host}${atomic.pathAccount}${atomic.uri-paramsAccount}
+  uriTradingAccounts: ${atomic.protocol}://${atomic.host}${atomic.pathTradingAccounts}${atomic.uri-paramsAccount}
 
 atomic1:
   host: ${ATOMIC_HOST:demo.fxbackoffice.com}
