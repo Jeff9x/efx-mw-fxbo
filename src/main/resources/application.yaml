@@ -107,6 +107,7 @@ atomic:
   path: ${ATOMIC_PATH:/rest/dict/countries}
   pathAccount: ${ATOMIC_PATH:/rest/accounts/new}
   pathTradingAccounts: ${ATOMIC_PATH:/rest/accounts}
+  pathUserAccount: ${ATOMIC_PATH:/rest/users}
   pathFxRates: ${ATOMIC_PATH:/fxrate}
   timeout: ${ATOMIC_TIMEOUT:3000}
   protocol: ${ATOMIC_PROTOCOL:https}
@@ -116,6 +117,7 @@ atomic:
   uriAccount: ${atomic.protocol}://${atomic.host}${atomic.pathAccount}${atomic.uri-paramsAccount}
   uriTradingAccounts: ${atomic.protocol}://${atomic.host}${atomic.pathTradingAccounts}${atomic.uri-paramsAccount}
   uriFxRates: ${atomic.protocol}://${atomic.hostMock}${atomic.pathFxRates}${atomic.uri-paramsAccount}
+  uriUserAccount: ${atomic.protocol}://${atomic.host}${atomic.pathUserAccount}
 
 atomic1:
   host: ${ATOMIC_HOST:demo.fxbackoffice.com}
