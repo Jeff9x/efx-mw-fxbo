@@ -6,8 +6,18 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
+
+import static org.apache.commons.io.IOUtils.toByteArray;
 
 @Component
 public class ImagePoaUploadRequestProcessor implements Processor {
@@ -26,10 +36,13 @@ public class ImagePoaUploadRequestProcessor implements Processor {
     String address;
     String postal_code;
     String country;
-    String backFile;
-    String backName;
+    String utilityFile;
+    String utilityName;
     boolean uploadedByClient;
 //    Data datas;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -73,11 +86,33 @@ public class ImagePoaUploadRequestProcessor implements Processor {
         {
             JSONObject fileObjectBack = backSideArray.getJSONObject(i);
 
-            String filePathBack = fileObjectBack.getString("file");
-            String fileNameBack = fileObjectBack.getString("name");
+            String filePath = fileObjectBack.getString("file");
+            String fileName = fileObjectBack.getString("name");
 
-            backFile = AppTokenJava.encodeFileToBase64(filePathBack);
-            backName = fileNameBack;
+            Resource urlResource = resourceLoader.getResource(filePath);
+
+            System.out.println("Front urlImage: " + urlResource);
+
+            byte[] imageBytes = toByteArray(urlResource.getInputStream());
+
+            File file = null;
+            if (Objects.equals(type, "Utility Bill")) {
+                // File object pointing to the output file
+                file = new File("utility_bill.png");
+
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    // Writing byte data to the file
+                    fos.write(imageBytes);
+                    System.out.println("Front File has been created: " + file.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            assert file != null;
+            utilityFile = AppTokenJava.encodeFileToBase64(file.getAbsolutePath());
+            utilityName = fileName;
         }
 
 //        System.out.println("Incoming Back Side Encoded: " + encodeBack);
@@ -86,7 +121,7 @@ public class ImagePoaUploadRequestProcessor implements Processor {
 //        System.out.println("Processed Request: " + requestBody);
 
         String finalPayload = AppTokenJava.toStringPoa(config,user,status,type, address,
-                postal_code,  country, backFile , backName, String.valueOf(uploadedByClient));
+                postal_code,  country, utilityFile , utilityName, String.valueOf(uploadedByClient));
 
         System.out.println("finalpayload"+finalPayload);
 
