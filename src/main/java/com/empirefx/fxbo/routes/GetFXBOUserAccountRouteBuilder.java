@@ -20,9 +20,9 @@ public class GetFXBOUserAccountRouteBuilder extends RouteBuilder {
                 .get("/customers/{fxboUserId}")
                 .description("Adapter REST Service")
                 .produces("application/json")
-                .to("direct:fetchUserAccount");
+                .to("direct:fetchUserAccountAPI");
 
-        from("direct:fetchUserAccount").routeId("com.empirefx.request.dispatchRequest31")
+        from("direct:fetchUserAccountAPI").routeId("com.empirefx.request.dispatchRequest32")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
@@ -32,7 +32,7 @@ public class GetFXBOUserAccountRouteBuilder extends RouteBuilder {
                 .removeHeaders("CamelHttp*")
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Fetch User Account Endpoint :: Request :: ${headers.finalUrl}")
-                .enrich().simple("${headers.finalUrl}").id("callServiceBack31")
+                .enrich().simple("${headers.finalUrl}").id("callServiceBack32")
                 .to("direct:fetchUserAccountResponse");
 
         from("direct:fetchUserAccountResponse")
