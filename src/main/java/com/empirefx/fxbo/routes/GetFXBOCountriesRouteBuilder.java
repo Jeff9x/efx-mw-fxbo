@@ -3,6 +3,7 @@ package com.empirefx.fxbo.routes;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
+import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +17,11 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-//        onException(Exception.class)
-//                .handled(true)
-//                .removeHeaders("*")
-//                .process("errorHandlingProcessor");
+// Global exception handler for validation errors
+        onException(ValidationException.class)
+                .log("Validation failed: ${exception.message}")
+                .handled(true)
+                .setBody(simple("Validation failed: ${exception.message}"));
 
         rest()
                 .get("/utility/countries")
