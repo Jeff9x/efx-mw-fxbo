@@ -124,6 +124,7 @@ atomic1:
   pathUpdateUser: ${ATOMIC_PATH:/rest/users/update}
   path: ${ATOMIC_PATH:/rest/accounts/new}
   pathPOI: ${ATOMIC_PATH:/rest/documents}
+  pathDeposits: ${ATOMIC_PATH:/rest/transactions/new}
   timeout: ${ATOMIC_TIMEOUT:3000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
@@ -132,6 +133,7 @@ atomic1:
   uriPOI: ${atomic1.protocol}://${atomic1.host}${atomic1.pathPOI}${atomic1.uri-paramsUser}
   uriUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUser}${atomic1.uri-params}
   uriUpdateUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUpdateUser}${atomic1.uri-params}
+  uriDeposit: ${atomic1.protocol}://${atomic1.host}${atomic1.pathDeposits}${atomic1.uri-params}
 
 ehf:
   host: ${EHF_HOST:localhost}
