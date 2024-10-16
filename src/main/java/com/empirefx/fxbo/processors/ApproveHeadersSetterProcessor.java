@@ -1,0 +1,51 @@
+package com.empirefx.fxbo.processors;
+
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+
+import static com.empirefx.fxbo.commonlib.constants.ConstantsCommons.CALLER_IP;
+import static com.empirefx.fxbo.commonlib.constants.ConstantsCommons.EMPTY;
+
+@Component
+public class ApproveHeadersSetterProcessor implements Processor {
+    @Value("${adaptive.authorization}")
+    private String authorization;
+    @Value("${adaptive.token}")
+    private String token;
+    @Value("${atomic1.uriApproveTransaction}")
+    private String pathApproveTransaction;
+    @Value("${atomic1.uri-paramsApproveTransaction}")
+    private String uriParamsApproveTransaction;
+    @Override
+    public void process(Exchange exchange) throws Exception {
+        // Get Caller IP
+        HttpServletRequest request = exchange.getIn().getBody(HttpServletRequest.class);
+
+        String ipRemote = Objects.isNull(request) ? EMPTY : request.getRemoteAddr();
+
+        // Set the Bearer token in the Authorization header
+        exchange.getIn().setHeader(CALLER_IP, ipRemote);
+        exchange.getIn().setHeader("Authorization", token);
+        System.out.println("Authorization Header Set:");
+
+        System.out.println("Incoming Caller IP :"+ipRemote);
+
+        String crmTransactionId = exchange.getIn().getHeader("crmTransactionId", String.class);
+        System.out.println("Crm Transaction ID :"+crmTransactionId);
+
+
+
+        String finaUrl = pathApproveTransaction+crmTransactionId+"/approve"+uriParamsApproveTransaction;
+        System.out.println("Fina URL :"+finaUrl);
+        exchange.getIn().setHeader("finaUrl", finaUrl);
+
+
+    }
+
+
+}
