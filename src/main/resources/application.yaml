@@ -127,17 +127,20 @@ atomic1:
   pathPOI: ${ATOMIC_PATH:/rest/documents}
   pathDeposits: ${ATOMIC_PATH:/rest/transactions/new}
   pathApprove: ${ATOMIC_PATH:/rest/transactions/}
+  pathDecline: ${ATOMIC_PATH:/rest/transactions/decline}
   timeout: ${ATOMIC_TIMEOUT:3000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-paramsUser: /new?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-paramsApproveTransaction: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPatch}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
+  uri-paramsDeclineTransaction: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPatch}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri: ${atomic1.protocol}://${atomic1.host}${atomic1.path}${atomic1.uri-params}
   uriPOI: ${atomic1.protocol}://${atomic1.host}${atomic1.pathPOI}${atomic1.uri-paramsUser}
   uriUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUser}${atomic1.uri-params}
   uriUpdateUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUpdateUser}${atomic1.uri-params}
   uriDeposit: ${atomic1.protocol}://${atomic1.host}${atomic1.pathDeposits}${atomic1.uri-params}
   uriApproveTransaction: ${atomic1.protocol}://${atomic1.host}${atomic1.pathApprove}
+  uriDeclineTransaction: ${atomic1.protocol}://${atomic1.host}${atomic1.pathDecline}${atomic1.uri-paramsDeclineTransaction}
 
 ehf:
   host: ${EHF_HOST:localhost}
