@@ -31,7 +31,6 @@ public class CreateFXBODepositRouteBuilder extends RouteBuilder {
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
-//                comments
                 .process("headersSetterProcessor")
                 .process("clientDepositRequestProcessor")
                 .marshal().json()
