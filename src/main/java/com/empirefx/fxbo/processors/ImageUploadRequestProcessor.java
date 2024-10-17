@@ -6,11 +6,21 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.apache.commons.io.IOUtils.toByteArray;
+
 @Component
 public class ImageUploadRequestProcessor implements Processor {
 
@@ -34,6 +44,9 @@ public class ImageUploadRequestProcessor implements Processor {
     String backName;
     boolean uploadedByClient;
 //    Data datas;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -78,10 +91,34 @@ public class ImageUploadRequestProcessor implements Processor {
         {
             JSONObject fileObject = frontSideArray.getJSONObject(i);
 
+
+
             String filePath = fileObject.getString("file");
             String fileName = fileObject.getString("name");
 
-            frontFile = AppTokenJava.encodeFileToBase64(filePath);
+            Resource urlResource = resourceLoader.getResource(filePath);
+
+            System.out.println("Front urlImage: " + urlResource);
+
+            byte[] imageBytes = toByteArray(urlResource.getInputStream());
+
+            File file = null;
+            if (Objects.equals(type, "National ID") && Objects.equals(fileName, "FRONT_SIDE")) {
+                // File object pointing to the output file
+                file = new File("front_side.png");
+
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    // Writing byte data to the file
+                    fos.write(imageBytes);
+                    System.out.println("Front File has been created: " + file.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            assert file != null;
+            frontFile = AppTokenJava.encodeFileToBase64(file.getAbsolutePath());
             frontName = fileName;
 
         }
@@ -94,7 +131,30 @@ public class ImageUploadRequestProcessor implements Processor {
             String filePathBack = fileObjectBack.getString("file");
             String fileNameBack = fileObjectBack.getString("name");
 
-            backFile = AppTokenJava.encodeFileToBase64(filePathBack);
+
+            Resource urlResourceBack = resourceLoader.getResource(filePathBack);
+
+            System.out.println("Front urlImage: " + urlResourceBack);
+
+            byte[] imageBytesBack = toByteArray(urlResourceBack.getInputStream());
+
+            File fileback = null;
+            if (Objects.equals(type, "National ID") && Objects.equals(fileNameBack, "BACK_SIDE")) {
+                // File object pointing to the output file
+                fileback = new File("back_side.png");
+
+                try (FileOutputStream fos = new FileOutputStream(fileback)) {
+                    // Writing byte data to the file
+                    fos.write(imageBytesBack);
+                    System.out.println("Back Side File has been created: " + fileback.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            assert fileback != null;
+            backFile = AppTokenJava.encodeFileToBase64(fileback.getAbsolutePath());
             backName = fileNameBack;
         }
 

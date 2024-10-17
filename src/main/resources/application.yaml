@@ -92,7 +92,7 @@ adaptive:
   method: GET
   camelHttpMethod: CamelHttpMethod
   authorization: Authorization
-  token: Bearer 8700c43e5ca0a3f3393b09677ef4e07b2c4e97a82e859b5e278e0a3dbbd86cfbb52f478a6d756079a8476fdb476e1a53cc658b9eb147345b4a39c807
+  token: Bearer 7a257b52b47741bd8d8c843d0bba2e5f2d04269992918597ce2824de45fa5351e30fc6d5c26b9cd1a0d4bfea6f43693067d4366244a360ebcbb3e54f
 #  path: ${ATOMIC_PATH:/rest/dict/countries}
 #  timeout: ${ATOMIC_TIMEOUT:3000}
 #  protocol: ${ATOMIC_PROTOCOL:https}
@@ -107,6 +107,7 @@ atomic:
   path: ${ATOMIC_PATH:/rest/dict/countries}
   pathAccount: ${ATOMIC_PATH:/rest/accounts/new}
   pathTradingAccounts: ${ATOMIC_PATH:/rest/accounts}
+  pathUserAccount: ${ATOMIC_PATH:/rest/users}
   pathFxRates: ${ATOMIC_PATH:/fxrate}
   timeout: ${ATOMIC_TIMEOUT:3000}
   protocol: ${ATOMIC_PROTOCOL:https}
@@ -116,6 +117,7 @@ atomic:
   uriAccount: ${atomic.protocol}://${atomic.host}${atomic.pathAccount}${atomic.uri-paramsAccount}
   uriTradingAccounts: ${atomic.protocol}://${atomic.host}${atomic.pathTradingAccounts}${atomic.uri-paramsAccount}
   uriFxRates: ${atomic.protocol}://${atomic.hostMock}${atomic.pathFxRates}${atomic.uri-paramsAccount}
+  uriUserAccount: ${atomic.protocol}://${atomic.host}${atomic.pathUserAccount}
 
 atomic1:
   host: ${ATOMIC_HOST:demo.fxbackoffice.com}

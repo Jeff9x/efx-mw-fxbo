@@ -1,5 +1,4 @@
 package com.empirefx.fxbo.routes;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.ValidationException;
@@ -8,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class GetFXBOTradingAccountsRouteBuilder extends RouteBuilder {
+public class GetFXBOUserAccountRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -20,25 +19,25 @@ public class GetFXBOTradingAccountsRouteBuilder extends RouteBuilder {
                 .setBody(simple("Validation failed: ${exception.message}"));
 
         rest()
-                .get("/trading-accounts/user/{fxboUserId}")
+                .get("/customers/{fxboUserId}")
                 .description("Adapter REST Service")
                 .produces("application/json")
-                .to("direct:fetchTradingAccounts");
+                .to("direct:fetchUserAccountAPI");
 
-        from("direct:fetchTradingAccounts").routeId("com.empirefx.request.dispatchRequest30")
+        from("direct:fetchUserAccountAPI").routeId("com.empirefx.request.dispatchRequest32")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .process("headersSetterProcessor")
-                .process("getTradingAccountsRequestProcessor")
+                .process("getUserAccountRequestProcessor")
                 .log(LoggingLevel.INFO, "Body Set ${body}")
                 .removeHeaders("CamelHttp*")
                 .doTry()
-                .log(LoggingLevel.INFO, "\n Calling FXBO Fetch Trading Accounts Endpoint :: Request :: {{atomic.uriTradingAccounts}}")
-                .enrich().simple("{{atomic.uriTradingAccounts}}").id("callServiceBack30")
-                .to("direct:fetchTradingAccountsResponse");
+                .log(LoggingLevel.INFO, "\n Calling FXBO Fetch User Account Endpoint :: Request :: ${headers.finalUrl}")
+                .enrich().simple("${headers.finalUrl}").id("callServiceBack32")
+                .to("direct:fetchUserAccountResponse");
 
-        from("direct:fetchTradingAccountsResponse")
+        from("direct:fetchUserAccountResponse")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Processed response with content type: ${header.Content-Type}")
