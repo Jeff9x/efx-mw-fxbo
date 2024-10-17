@@ -127,7 +127,7 @@ atomic1:
   pathUpdateUser: ${ATOMIC_PATH:/rest/users/update}
   path: ${ATOMIC_PATH:/rest/accounts/new}
   pathPOI: ${ATOMIC_PATH:/rest/documents}
-  pathDeposits: ${ATOMIC_PATH:/rest/transactions/new}
+  pathDeposits: ${ATOMIC_PATH:/rest/transactions/deposits/new}
   pathApprove: ${ATOMIC_PATH:/rest/transactions/}
   pathDecline: ${ATOMIC_PATH:/rest/transactions/decline}
   timeout: ${ATOMIC_TIMEOUT:3000}
