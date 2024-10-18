@@ -26,7 +26,7 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
         rest()
                 .get("/utility/countries")
                 .description("Adapter REST Service")
-                .produces("application/json")
+                .produces(APPLICATION_JSON_VALUE)
                 .to("direct:fetchCountries");
 
         from("direct:fetchCountries").routeId("com.empirefx.request.getcountries")
@@ -44,7 +44,6 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Processed response with content type: ${header.Content-Type}")
                 .removeHeaders("*")
-                .removeHeader("Authorization")
                 .doTry()
                 .process("countryResponseProcessor");
     }

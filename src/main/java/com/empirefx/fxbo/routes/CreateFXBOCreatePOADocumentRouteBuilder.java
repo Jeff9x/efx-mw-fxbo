@@ -24,7 +24,7 @@ public class CreateFXBOCreatePOADocumentRouteBuilder extends RouteBuilder {
                 .post("/upload-poa-document")
                 .description("Adapter REST Service")
                 .consumes(APPLICATION_JSON_VALUE)
-                .produces("application/json")
+                .produces(APPLICATION_JSON_VALUE)
                 .to("direct:createPOADocument");
 
         from("direct:createPOADocument").routeId("com.empirefx.request.dispatchRequest20")
