@@ -129,6 +129,7 @@ atomic1:
   pathPOI: ${ATOMIC_PATH:/rest/documents}
   pathDeposits: ${ATOMIC_PATH:/rest/transactions/deposits/new}
   pathApprove: ${ATOMIC_PATH:/rest/transactions/}
+  pathFetchTransactions: ${ATOMIC_PATH:/rest/transactions}
   pathDecline: ${ATOMIC_PATH:/rest/transactions/decline}
   timeout: ${ATOMIC_TIMEOUT:3000}
   protocol: ${ATOMIC_PROTOCOL:https}
@@ -142,6 +143,7 @@ atomic1:
   uriUpdateUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUpdateUser}${atomic1.uri-params}
   uriDeposit: ${atomic1.protocol}://${atomic1.host}${atomic1.pathDeposits}${atomic1.uri-params}
   uriApproveTransaction: ${atomic1.protocol}://${atomic1.host}${atomic1.pathApprove}
+  uriFetchTransactions: ${atomic1.protocol}://${atomic1.host}${atomic1.pathFetchTransactions}${atomic1.uri-params}
   uriDeclineTransaction: ${atomic1.protocol}://${atomic1.host}${atomic1.pathDecline}${atomic1.uri-paramsDeclineTransaction}
 
 ehf:
