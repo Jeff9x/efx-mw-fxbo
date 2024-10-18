@@ -131,6 +131,7 @@ atomic1:
   pathApprove: ${ATOMIC_PATH:/rest/transactions/}
   pathFetchTransactions: ${ATOMIC_PATH:/rest/transactions}
   pathDecline: ${ATOMIC_PATH:/rest/transactions/decline}
+  pathAccountBalance: ${ATOMIC_PATH:/rest/accounts/check-balance}
   timeout: ${ATOMIC_TIMEOUT:3000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
@@ -145,6 +146,7 @@ atomic1:
   uriApproveTransaction: ${atomic1.protocol}://${atomic1.host}${atomic1.pathApprove}
   uriFetchTransactions: ${atomic1.protocol}://${atomic1.host}${atomic1.pathFetchTransactions}${atomic1.uri-params}
   uriDeclineTransaction: ${atomic1.protocol}://${atomic1.host}${atomic1.pathDecline}${atomic1.uri-paramsDeclineTransaction}
+  uriAccountBalance: ${atomic1.protocol}://${atomic1.host}${atomic1.pathAccountBalance}${atomic1.uri-params}
 
 ehf:
   host: ${EHF_HOST:localhost}
