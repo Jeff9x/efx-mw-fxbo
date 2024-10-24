@@ -105,6 +105,7 @@ atomic:
   method: GET
   method2: POST
   path: ${ATOMIC_PATH:/rest/dict/countries}
+  pathAccountTypes: ${ATOMIC_PATH:/rest/dict/account-type}
   pathAccount: ${ATOMIC_PATH:/rest/accounts/new}
   pathTradingAccounts: ${ATOMIC_PATH:/rest/accounts}
   pathUserAccount: ${ATOMIC_PATH:/rest/users}
@@ -114,6 +115,7 @@ atomic:
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
   uri-paramsAccount: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method2}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
   uri: ${atomic.protocol}://${atomic.host}${atomic.path}${atomic.uri-params}
+  uriAccountTypes: ${atomic.protocol}://${atomic.host}${atomic.pathAccountTypes}${atomic.uri-params}
   uriAccount: ${atomic.protocol}://${atomic.host}${atomic.pathAccount}${atomic.uri-paramsAccount}
   uriTradingAccounts: ${atomic.protocol}://${atomic.host}${atomic.pathTradingAccounts}${atomic.uri-paramsAccount}
   uriFxRates: ${atomic.protocol}://${atomic.hostMock}${atomic.pathFxRates}${atomic.uri-paramsAccount}
