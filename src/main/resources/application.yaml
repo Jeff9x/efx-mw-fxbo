@@ -106,6 +106,7 @@ atomic:
   method: GET
   method2: POST
   path: ${ATOMIC_PATH:/rest/dict/countries}
+  pathAccountTypes: ${ATOMIC_PATH:/rest/dict/account-type}
   pathAccount: ${ATOMIC_PATH:/rest/accounts/new}
   pathTradingAccounts: ${ATOMIC_PATH:/rest/accounts}
   pathUserAccount: ${ATOMIC_PATH:/rest/users}
@@ -115,6 +116,7 @@ atomic:
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
   uri-paramsAccount: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method2}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
   uri: ${atomic.protocol}://${atomic.host}${atomic.path}${atomic.uri-params}
+  uriAccountTypes: ${atomic.protocol}://${atomic.host}${atomic.pathAccountTypes}${atomic.uri-params}
   uriAccount: ${atomic.protocol}://${atomic.host}${atomic.pathAccount}${atomic.uri-paramsAccount}
   uriTradingAccounts: ${atomic.protocol}://${atomic.host}${atomic.pathTradingAccounts}${atomic.uri-paramsAccount}
   uriFxRates: ${atomic.protocol}://${atomic.hostMock}${atomic.pathFxRates}${atomic.uri-paramsAccount}
@@ -129,6 +131,7 @@ atomic1:
   path: ${ATOMIC_PATH:/rest/accounts/new}
   pathPOI: ${ATOMIC_PATH:/rest/documents}
   pathDeposits: ${ATOMIC_PATH:/rest/transactions/deposits/new}
+  pathWithdrawals: ${ATOMIC_PATH:/rest/transactions/withdrawals/new}
   pathApprove: ${ATOMIC_PATH:/rest/transactions/}
   pathFetchTransactions: ${ATOMIC_PATH:/rest/transactions}
   pathDecline: ${ATOMIC_PATH:/rest/transactions/decline}
@@ -144,6 +147,7 @@ atomic1:
   uriUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUser}${atomic1.uri-params}
   uriUpdateUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUpdateUser}${atomic1.uri-params}
   uriDeposit: ${atomic1.protocol}://${atomic1.host}${atomic1.pathDeposits}${atomic1.uri-params}
+  uriWithdrawal: ${atomic1.protocol}://${atomic1.host}${atomic1.pathWithdrawals}${atomic1.uri-params}
   uriApproveTransaction: ${atomic1.protocol}://${atomic1.host}${atomic1.pathApprove}
   uriFetchTransactions: ${atomic1.protocol}://${atomic1.host}${atomic1.pathFetchTransactions}${atomic1.uri-params}
   uriDeclineTransaction: ${atomic1.protocol}://${atomic1.host}${atomic1.pathDecline}${atomic1.uri-paramsDeclineTransaction}
