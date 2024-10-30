@@ -39,7 +39,6 @@ public class CreateFXBODepositRouteBuilder extends RouteBuilder {
                 .to("direct:fetchDepositResponse");
 
         from("direct:fetchDepositResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
                 .setBody(simple("${body}"))
                 .log("Response body: ${body}")

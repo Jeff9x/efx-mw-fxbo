@@ -40,7 +40,6 @@ public class UpdateFXBODeclineTransactionRouteBuilder extends RouteBuilder {
                 .to("direct:fetchDeclineTransactionResponse");
 
         from("direct:fetchDeclineTransactionResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
                 .log("body Response ${body}")
                 .doTry()

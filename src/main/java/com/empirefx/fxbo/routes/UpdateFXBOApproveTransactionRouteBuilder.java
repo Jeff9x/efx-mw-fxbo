@@ -40,7 +40,6 @@ public class UpdateFXBOApproveTransactionRouteBuilder extends RouteBuilder {
                 .to("direct:fetchApproveTransactionResponse");
 
         from("direct:fetchApproveTransactionResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
                 .doTry()
                 .setBody(simple("${body}"))

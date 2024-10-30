@@ -36,7 +36,6 @@ public class GetFXBOAccountBalanceRouteBuilder extends RouteBuilder {
                 .to("direct:fetchAccountBalanceResponse");
 
         from("direct:fetchAccountBalanceResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Processed response with content type: ${header.Content-Type}")
                 .removeHeaders("*")

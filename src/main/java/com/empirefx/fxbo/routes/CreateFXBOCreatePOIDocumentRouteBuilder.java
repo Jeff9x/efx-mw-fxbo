@@ -41,7 +41,6 @@ public class CreateFXBOCreatePOIDocumentRouteBuilder extends RouteBuilder {
                 .to("direct:fetchPOIResponse");
 
         from("direct:fetchPOIResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
 //                .log("Processed response : ${body}")
                 .removeHeaders("*")

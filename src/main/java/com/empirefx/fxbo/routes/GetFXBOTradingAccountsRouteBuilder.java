@@ -39,7 +39,6 @@ public class GetFXBOTradingAccountsRouteBuilder extends RouteBuilder {
                 .to("direct:fetchTradingAccountsResponse");
 
         from("direct:fetchTradingAccountsResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Processed response with content type: ${header.Content-Type}")
                 .setBody(simple("${body}"))

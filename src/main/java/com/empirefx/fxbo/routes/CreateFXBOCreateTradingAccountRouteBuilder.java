@@ -43,7 +43,6 @@ public class CreateFXBOCreateTradingAccountRouteBuilder extends RouteBuilder {
                 .to("direct:fetchTradingAccountResponse");
 
         from("direct:fetchTradingAccountResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
                 .setBody(simple("${body}"))
                 .log("Response body: ${body}")

@@ -41,7 +41,6 @@ public class CreateFXBOUserCreateAccountRouteBuilder extends RouteBuilder {
                 .to("direct:fetchUserAccountsResponse");
 
         from("direct:fetchUserAccountsResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
                 .removeHeaders("*")
