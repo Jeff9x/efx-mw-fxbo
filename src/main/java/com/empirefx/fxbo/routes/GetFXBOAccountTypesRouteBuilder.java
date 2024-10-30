@@ -38,12 +38,19 @@ public class GetFXBOAccountTypesRouteBuilder extends RouteBuilder {
                 .to("direct:fetchAccountTypesResponse");
 
         from("direct:fetchAccountTypesResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
-                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .log("Processed response with content type: ${header.Content-Type}")
-                .removeHeaders("*")
-                .removeHeader("Authorization")
+               .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log("Incoming response: ${body}")
                 .doTry()
-                .process("accountTypesResponseProcessor");
+                    .unmarshal().json()
+                        .choice()
+                            .when(simple("${body[error]} != null")) // Adjust condition based on actual error field
+                                .log("Request failed: ${body[error]}")
+                            .otherwise()
+                                .log("Request was successful.")
+                        .endChoice()
+                .endDoTry()
+                    .doCatch(Exception.class)
+                        .log("Exception during processing: ${exception.message}")
+                .end();
     }
 }

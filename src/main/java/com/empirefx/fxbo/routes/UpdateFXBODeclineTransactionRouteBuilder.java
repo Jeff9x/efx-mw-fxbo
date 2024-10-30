@@ -40,12 +40,21 @@ public class UpdateFXBODeclineTransactionRouteBuilder extends RouteBuilder {
                 .to("direct:fetchDeclineTransactionResponse");
 
         from("direct:fetchDeclineTransactionResponse")
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log("Incoming response: ${body}")
                 .log("Processed response with content type: ${header.Content-Type}")
                 .log("body Response ${body}")
                 .doTry()
-                .setBody(simple("${body}"))
-                .convertBodyTo(String.class)
-                .unmarshal().json()
+                    .unmarshal().json()
+                        .choice()
+                            .when(simple("${body[error]} != null")) // Adjust condition based on actual error field
+                                .log("Request failed: ${body[error]}")
+                            .otherwise()
+                                .log("Request was successful.")
+                        .endChoice()
+                .endDoTry()
+                    .doCatch(Exception.class)
+                        .log("Exception during processing: ${exception.message}")
                 .end();
     }
 }

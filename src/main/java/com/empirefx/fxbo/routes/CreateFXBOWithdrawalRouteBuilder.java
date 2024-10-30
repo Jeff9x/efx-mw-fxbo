@@ -40,12 +40,19 @@ public class CreateFXBOWithdrawalRouteBuilder extends RouteBuilder {
                 .to("direct:fetchWithdrawalResponse");
 
         from("direct:fetchWithdrawalResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
-                .log("Processed response with content type: ${header.Content-Type}")
-                .setBody(simple("${body}"))
-                .log("Response body: ${body}")
-                .convertBodyTo(String.class)
-                .unmarshal().json()
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log("Incoming response: ${body}")
+                .doTry()
+                    .unmarshal().json()
+                        .choice()
+                            .when(simple("${body[error]} != null")) // Adjust condition based on actual error field
+                                .log("Request failed: ${body[error]}")
+                            .otherwise()
+                                .log("Request was successful.")
+                        .endChoice()
+                .endDoTry()
+                    .doCatch(Exception.class)
+                        .log("Exception during processing: ${exception.message}")
                 .end();
     }
 }

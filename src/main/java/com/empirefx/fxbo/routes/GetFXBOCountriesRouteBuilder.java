@@ -44,6 +44,15 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
 
         from("direct:fetchCountriesResponse")
 //        from("{{management.rabbitmq.getCountriesQueue}}")
+//                .log("Received response from RabbitMQ queue: ${body}")
+//                .process(exchange -> {
+//                    // Convert response to a UTF-8 encoded JSON string if it's not already
+////                    String jsonResponse = new String(exchange.getIn().getBody(byte[].class), StandardCharsets.UTF_8);
+//                    String jsonResponse = exchange.getIn().getBody(String.class);
+//                    exchange.getIn().setBody(jsonResponse);
+//                })
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log("Incoming response: ${body}")
                 .log("Received response from RabbitMQ queue: ${body}")
                 .process(exchange -> {
                     // Convert response to a UTF-8 encoded JSON string if it's not already
@@ -56,6 +65,16 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
                 .log("Processed response with content type: ${header.Content-Type}")
                 .removeHeaders("*")
                 .doTry()
-                .process("countryResponseProcessor");
+                    .unmarshal().json()
+                        .choice()
+                            .when(simple("${body[error]} != null")) // Adjust condition based on actual error field
+                                .log("Request failed: ${body[error]}")
+                            .otherwise()
+                                .log("Request was successful.")
+                        .endChoice()
+                .endDoTry()
+                    .doCatch(Exception.class)
+                        .log("Exception during processing: ${exception.message}")
+                .end();
     }
 }

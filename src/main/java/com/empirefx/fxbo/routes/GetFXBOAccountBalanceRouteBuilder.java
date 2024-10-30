@@ -38,9 +38,10 @@ public class GetFXBOAccountBalanceRouteBuilder extends RouteBuilder {
         from("direct:fetchAccountBalanceResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Processed response with content type: ${header.Content-Type}")
+                .log("Incoming response: ${body}")
                 .removeHeaders("*")
                 .removeHeader("Authorization")
                 .doTry()
-                .process("accountBalanceResponseProcessor");
+                    .process("accountBalanceResponseProcessor");
     }
 }
