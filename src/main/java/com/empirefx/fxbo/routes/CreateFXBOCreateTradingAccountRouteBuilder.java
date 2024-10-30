@@ -56,6 +56,11 @@ public class CreateFXBOCreateTradingAccountRouteBuilder extends RouteBuilder {
                 .endDoTry()
                 .doCatch(Exception.class)
                     .log("Exception during processing: ${exception.message}")
+                .log("Processed response with content type: ${header.Content-Type}")
+                .setBody(simple("${body}"))
+                .log("Response body: ${body}")
+                .convertBodyTo(String.class)
+                .unmarshal().json()
                 .end();
     }
 }

@@ -41,6 +41,7 @@ public class UpdateFXBOUserAccountRouteBuilder extends RouteBuilder {
         from("direct:fetchUpdateUserAccountsResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
+                .log("Processed response with content type: ${header.Content-Type}")
                 .doTry()
                     .unmarshal().json()
                         .choice()

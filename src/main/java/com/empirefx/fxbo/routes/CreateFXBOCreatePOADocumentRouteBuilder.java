@@ -24,7 +24,7 @@ public class CreateFXBOCreatePOADocumentRouteBuilder extends RouteBuilder {
                 .post("/upload-poa-document")
                 .description("Adapter REST Service")
                 .consumes(APPLICATION_JSON_VALUE)
-                .produces("application/json")
+                .produces(APPLICATION_JSON_VALUE)
                 .to("direct:createPOADocument");
 
         from("direct:createPOADocument").routeId("com.empirefx.request.dispatchRequest20")
@@ -43,6 +43,10 @@ public class CreateFXBOCreatePOADocumentRouteBuilder extends RouteBuilder {
         from("direct:fetchPOAResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
+                .log("Processed response with content type: ${header.Content-Type}")
+//                .log("Processed response : ${body}")
+                .removeHeaders("*")
+                .removeHeader("Authorization")
                 .doTry()
                     .unmarshal().json()
                         .choice()
