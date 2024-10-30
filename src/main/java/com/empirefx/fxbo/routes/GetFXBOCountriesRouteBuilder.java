@@ -39,11 +39,11 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Request :: {{atomic.uri}}")
                 .enrich().simple("{{atomic.uri}}").id("callServiceBack")
                 .setHeader(CONTENT_TYPE.getName(), constant(APPLICATION_JSON_VALUE))
-//                .to("direct:fetchCountriesResponse");
-                .to("{{management.rabbitmq.getCountriesQueue}}");
+                .to("direct:fetchCountriesResponse");
+//                .to("{{management.rabbitmq.getCountriesQueue}}");
 
-//        from("direct:fetchCountriesResponse")
-        from("{{management.rabbitmq.getCountriesQueue}}")
+        from("direct:fetchCountriesResponse")
+//        from("{{management.rabbitmq.getCountriesQueue}}")
                 .log("Received response from RabbitMQ queue: ${body}")
                 .process(exchange -> {
                     // Convert response to a UTF-8 encoded JSON string if it's not already

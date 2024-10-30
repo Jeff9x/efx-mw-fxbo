@@ -39,7 +39,6 @@ public class UpdateFXBOUserAccountRouteBuilder extends RouteBuilder {
                 .to("direct:fetchUpdateUserAccountsResponse");
 
         from("direct:fetchUpdateUserAccountsResponse")
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
                 .doTry()
                 .setBody(simple("${body}"))
