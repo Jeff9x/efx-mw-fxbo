@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Component
-public class CreateFXBODepositRouteBuilder extends RouteBuilder {
+public class CreateFXBOWithdrawalRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -21,24 +21,26 @@ public class CreateFXBODepositRouteBuilder extends RouteBuilder {
                 .setBody(simple("Validation failed: ${exception.message}"));
 
         rest()
-                .post("/transactions/deposits")
+                .post("/transactions/withdrawals")
                 .description("Adapter REST Service FXBO Deposits")
                 .consumes(APPLICATION_JSON_VALUE)
                 .produces("application/json")
-                .to("direct:makeDeposits");
+                .to("direct:makeWithdrawals");
 
-        from("direct:makeDeposits").routeId("com.empirefx.request.dispatchRequest101")
+        from("direct:makeWithdrawals").routeId("com.empirefx.request.dispatchRequest102")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
                 .process("headersSetterProcessor")
-                .process("clientDepositRequestProcessor")
-                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Deposit Request :: {{atomic1.uriDeposit}}")
-                .enrich().simple("{{atomic1.uriDeposit}}").id("callServiceBack101")
+                .process("clientRequestWithdrawalProcessor")
+                .doTry()
+                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Withdrawal Request :: {{atomic1.uriWithdrawal}}")
+                .enrich().simple("{{atomic1.uriWithdrawal}}").id("callServiceBack102")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .to("direct:fetchDepositResponse");
+                .to("direct:fetchWithdrawalResponse");
 
-        from("direct:fetchDepositResponse")
+        from("direct:fetchWithdrawalResponse")
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .log("Processed response with content type: ${header.Content-Type}")
                 .setBody(simple("${body}"))
                 .log("Response body: ${body}")

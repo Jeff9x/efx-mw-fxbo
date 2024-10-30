@@ -1,20 +1,16 @@
 package com.empirefx.fxbo.routes;
 
-
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-
 import static com.empirefx.fxbo.commonlib.enums.HTTPCommonHeadersEnum.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
-
 @Component
-public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
+public class GetFXBOAccountTypesRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -26,36 +22,28 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
                 .setBody(simple("Validation failed: ${exception.message}"));
 
         rest()
-                .get("/utility/countries")
+                .get("/utility/account-types")
                 .description("Adapter REST Service")
-                .produces(APPLICATION_JSON_VALUE)
-                .to("direct:fetchCountries");
+                .produces("application/json")
+                .to("direct:fetchAccountTypes");
 
-        from("direct:fetchCountries").routeId("com.empirefx.request.getcountries")
+        from("direct:fetchAccountTypes").routeId("com.empirefx.request.getaccounttypes")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .process("headersSetterProcessor")
                 .removeHeaders("*", "Authorization")// Set Authorization header
                 .doTry()
-                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Request :: {{atomic.uri}}")
-                .enrich().simple("{{atomic.uri}}").id("callServiceBack")
+                .log(LoggingLevel.INFO, "\n Calling FXBO Account Types Endpoint :: Request :: {{atomic.uriAccountTypes}}")
+                .enrich().simple("{{atomic.uriAccountTypes}}").id("callServiceBack200")
                 .setHeader(CONTENT_TYPE.getName(), constant(APPLICATION_JSON_VALUE))
-                .to("direct:fetchCountriesResponse");
-//                .to("{{management.rabbitmq.getCountriesQueue}}");
+                .to("direct:fetchAccountTypesResponse");
 
-        from("direct:fetchCountriesResponse")
-//        from("{{management.rabbitmq.getCountriesQueue}}")
-                .log("Received response from RabbitMQ queue: ${body}")
-                .process(exchange -> {
-                    // Convert response to a UTF-8 encoded JSON string if it's not already
-//                    String jsonResponse = new String(exchange.getIn().getBody(byte[].class), StandardCharsets.UTF_8);
-                    String jsonResponse = exchange.getIn().getBody(String.class);
-                    exchange.getIn().setBody(jsonResponse);
-                })
+        from("direct:fetchAccountTypesResponse")
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .log("Returning decoded JSON response to caller: ${body}")
                 .log("Processed response with content type: ${header.Content-Type}")
                 .removeHeaders("*")
+                .removeHeader("Authorization")
                 .doTry()
-                .process("countryResponseProcessor");
+                .process("accountTypesResponseProcessor");
     }
 }
