@@ -43,11 +43,19 @@ public class CreateFXBOCreateTradingAccountRouteBuilder extends RouteBuilder {
                 .to("direct:fetchTradingAccountResponse");
 
         from("direct:fetchTradingAccountResponse")
-                .log("Processed response with content type: ${header.Content-Type}")
-                .setBody(simple("${body}"))
-                .log("Response body: ${body}")
-                .convertBodyTo(String.class)
-                .unmarshal().json()
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log("Incoming response: ${body}")
+                .doTry()
+                    .unmarshal().json()
+                        .choice()
+                            .when(simple("${body[error]} != null")) // Adjust condition based on actual error field
+                                .log("Request failed: ${body[error]}")
+                            .otherwise()
+                                .log("Request was successful.")
+                        .endChoice()
+                .endDoTry()
+                .doCatch(Exception.class)
+                    .log("Exception during processing: ${exception.message}")
                 .end();
     }
 }

@@ -40,11 +40,18 @@ public class GetFXBOFxRatesRouteBuilder extends RouteBuilder {
 
         from("direct:fetchFxRatesResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .log("Processed response with content type: ${header.Content-Type}")
-                .log(LoggingLevel.INFO, "Body Set ${body}")
-                .setBody(simple("${body}"))
-                .convertBodyTo(String.class)
-                .unmarshal().json()
+                .log("Incoming response: ${body}")
+                .doTry()
+                    .unmarshal().json()
+                        .choice()
+                            .when(simple("${body[error]} != null")) // Adjust condition based on actual error field
+                                .log("Request failed: ${body[error]}")
+                            .otherwise()
+                                .log("Request was successful.")
+                        .endChoice()
+                .endDoTry()
+                    .doCatch(Exception.class)
+                        .log("Exception during processing: ${exception.message}")
                 .end();
     }
 }

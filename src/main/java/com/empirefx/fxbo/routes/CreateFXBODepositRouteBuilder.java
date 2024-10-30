@@ -33,7 +33,6 @@ public class CreateFXBODepositRouteBuilder extends RouteBuilder {
                 .setHeader("Accept", constant("application/json"))
                 .process("headersSetterProcessor")
                 .process("clientDepositRequestProcessor")
-                .marshal().json()
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Deposit Request :: {{atomic1.uriDeposit}}")
                 .enrich().simple("{{atomic1.uriDeposit}}").id("callServiceBack101")
@@ -41,11 +40,19 @@ public class CreateFXBODepositRouteBuilder extends RouteBuilder {
                 .to("direct:fetchDepositResponse");
 
         from("direct:fetchDepositResponse")
-                .log("Processed response with content type: ${header.Content-Type}")
-                .setBody(simple("${body}"))
-                .log("Response body: ${body}")
-                .convertBodyTo(String.class)
-                .unmarshal().json()
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log("Incoming response: ${body}")
+                .doTry()
+                    .unmarshal().json()
+                        .choice()
+                            .when(simple("${body[error]} != null")) // Adjust condition based on actual error field
+                                .log("Request failed: ${body[error]}")
+                            .otherwise()
+                                .log("Request was successful.")
+                        .endChoice()
+                .endDoTry()
+                .doCatch(Exception.class)
+                    .log("Exception during processing: ${exception.message}")
                 .end();
     }
 }

@@ -41,14 +41,19 @@ public class CreateFXBOCreatePOIDocumentRouteBuilder extends RouteBuilder {
                 .to("direct:fetchPOIResponse");
 
         from("direct:fetchPOIResponse")
-                .log("Processed response with content type: ${header.Content-Type}")
-//                .log("Processed response : ${body}")
-                .removeHeaders("*")
-                .removeHeader("Authorization")
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log("Incoming response: ${body}")
                 .doTry()
-                .setBody(simple("${body}"))
-                .convertBodyTo(String.class)
-                .unmarshal().json()
+                    .unmarshal().json()
+                        .choice()
+                            .when(simple("${body[error]} != null")) // Adjust condition based on actual error field
+                                .log("Request failed: ${body[error]}")
+                            .otherwise()
+                                .log("Request was successful.")
+                        .endChoice()
+                .endDoTry()
+                    .doCatch(Exception.class)
+                        .log("Exception during processing: ${exception.message}")
                 .end();
     }
 }
