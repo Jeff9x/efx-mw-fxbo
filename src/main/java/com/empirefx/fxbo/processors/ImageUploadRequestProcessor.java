@@ -19,6 +19,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import static com.empirefx.fxbo.models.provider.S3ImageDownloader.downloadImage;
 import static org.apache.commons.io.IOUtils.toByteArray;
 
 @Component
@@ -96,11 +97,13 @@ public class ImageUploadRequestProcessor implements Processor {
             String filePath = fileObject.getString("file");
             String fileName = fileObject.getString("name");
 
-            Resource urlResource = resourceLoader.getResource(filePath);
+//            Resource urlResource = resourceLoader.getResource(filePath);
+//
+//            System.out.println("Front urlImage: " + urlResource);
 
-            System.out.println("Front urlImage: " + urlResource);
+//            byte[] imageBytes = toByteArray(urlResource.getInputStream());
 
-            byte[] imageBytes = toByteArray(urlResource.getInputStream());
+            byte[] imageBytes = downloadImage(filePath);
 
             File file = null;
             if (Objects.equals(type, "National ID") && Objects.equals(fileName, "FRONT_SIDE")) {
@@ -132,11 +135,13 @@ public class ImageUploadRequestProcessor implements Processor {
             String fileNameBack = fileObjectBack.getString("name");
 
 
-            Resource urlResourceBack = resourceLoader.getResource(filePathBack);
+//            Resource urlResourceBack = resourceLoader.getResource(filePathBack);
 
-            System.out.println("Front urlImage: " + urlResourceBack);
+//            System.out.println("Front urlImage: " + urlResourceBack);
 
-            byte[] imageBytesBack = toByteArray(urlResourceBack.getInputStream());
+//            byte[] imageBytesBack = toByteArray(urlResourceBack.getInputStream());
+
+            byte[] imageBytesBack = downloadImage(filePathBack);
 
             File fileback = null;
             if (Objects.equals(type, "National ID") && Objects.equals(fileNameBack, "BACK_SIDE")) {

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.empirefx.fxbo.models.provider.S3ImageDownloader.downloadImage;
 import static org.apache.commons.io.IOUtils.toByteArray;
 
 @Component
@@ -89,11 +90,13 @@ public class ImagePoaUploadRequestProcessor implements Processor {
             String filePath = fileObjectBack.getString("file");
             String fileName = fileObjectBack.getString("name");
 
-            Resource urlResource = resourceLoader.getResource(filePath);
+//            Resource urlResource = resourceLoader.getResource(filePath);
+//
+//            System.out.println("Front urlImage: " + urlResource);
 
-            System.out.println("Front urlImage: " + urlResource);
+//            byte[] imageBytes = toByteArray(urlResource.getInputStream());
 
-            byte[] imageBytes = toByteArray(urlResource.getInputStream());
+            byte[] imageBytes = downloadImage(filePath);
 
             File file = null;
             if (Objects.equals(type, "Utility Bill")) {
