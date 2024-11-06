@@ -6,17 +6,24 @@ import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 public class GetFXBOAccountBalanceRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
 
-// Global exception handler for validation errors
-        onException(ValidationException.class)
-                .log("Validation failed: ${exception.message}")
+// Handle validation exceptions with a structured error response
+        onException(IllegalArgumentException.class)
                 .handled(true)
-                .setBody(simple("Validation failed: ${exception.message}"));
+                .log(LoggingLevel.ERROR, "Validation error: ${exception.message}")
+                .process(exchange -> {
+                    String errorMessage = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, IllegalArgumentException.class).getMessage();
+                    exchange.getIn().setBody(Map.of("code", 400, "message", errorMessage));
+                    exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
+                    exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, 400);
+                });
 
         rest()
                 .post("/trading-accounts/account-balance")
@@ -28,6 +35,7 @@ public class GetFXBOAccountBalanceRouteBuilder extends RouteBuilder {
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
+                .process("validateAccountRequestProcessor")
                 .process("headersSetterProcessor")
                 .marshal().json()
                 .doTry()

@@ -1,25 +1,36 @@
 package com.empirefx.fxbo.routes;
 
-import com.empirefx.fxbo.commonlib.exceptions.UnsuccessfullException;
+import com.empirefx.fxbo.processors.ValidateCreateUserRequestProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
-import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
 
+import java.util.Map;
+
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @Component
 public class CreateFXBOUserCreateAccountRouteBuilder extends RouteBuilder {
+    private final ValidateCreateUserRequestProcessor validationProcessor;
+
+    public CreateFXBOUserCreateAccountRouteBuilder(ValidateCreateUserRequestProcessor validationProcessor) {
+        this.validationProcessor = validationProcessor;
+    }
+
 
     @Override
     public void configure() throws Exception {
-
-// Global exception handler for validation errors
-        onException(ValidationException.class)
-                .log("Validation failed: ${exception.message}")
+        // Handle validation exceptions with a structured error response
+        onException(IllegalArgumentException.class)
                 .handled(true)
-                .setBody(simple("Validation failed: ${exception.message}"));
+                .log(LoggingLevel.ERROR, "Validation error: ${exception.message}")
+                .process(exchange -> {
+                    String errorMessage = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, IllegalArgumentException.class).getMessage();
+                    exchange.getIn().setBody(Map.of("code", 400, "message", errorMessage));
+                    exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
+                    exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, 400);
+                });
 
         rest()
                 .post("/create-user-account")
@@ -32,12 +43,14 @@ public class CreateFXBOUserCreateAccountRouteBuilder extends RouteBuilder {
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
+                .doTry()
+                .process("validateCreateUserRequestProcessor")
+                .end()
                 .process("createUserAccountHeadersSetterProcessor")
                 .process("clientRequestProcessor")
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Account Request :: {{atomic1.uriUser}}")
                 .enrich().simple("{{atomic1.uriUser}}").id("createUserAccount5")
-//                .convertBodyTo(String.class)
                 .to("direct:fetchUserAccountsResponse");
 
         from("direct:fetchUserAccountsResponse")
