@@ -1,10 +1,13 @@
 package com.empirefx.fxbo.routes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class GetFXBOTransactionsRouteBuilder extends RouteBuilder {
@@ -38,15 +41,18 @@ public class GetFXBOTransactionsRouteBuilder extends RouteBuilder {
         from("direct:fetchTransactionsResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
+                .process("emptyResponseProcessor")
                 .doTry()
                     .unmarshal().json()
+                    .process("emptyTransactionsResponseProcessor")
                         .choice()
-                            .when(simple("${body[error]} != null")) // Adjust condition based on actual error field
-                                .log("Request failed: ${body[error]}")
+                            .when(simple("${body[]} == null")) // Adjust condition based on actual error field
+                                .log("Request failed: ${body[]}")
                             .otherwise()
                                 .log("Request was successful.")
                         .endChoice()
                 .endDoTry()
+                .process("successResponseProcessor")
                     .doCatch(Exception.class)
                         .log("Exception during processing: ${exception.message}")
                 .end();
