@@ -1,5 +1,6 @@
 package com.empirefx.fxbo.routes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.ValidationException;
@@ -45,11 +46,21 @@ public class GetFXBOAccountBalanceRouteBuilder extends RouteBuilder {
 
         from("direct:fetchAccountBalanceResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .log("Processed response with content type: ${header.Content-Type}")
                 .log("Incoming response: ${body}")
-                .removeHeaders("*")
-                .removeHeader("Authorization")
+                .process("emptyResponseProcessor")
                 .doTry()
-                    .process("accountBalanceResponseProcessor");
+                    .unmarshal().json()
+                    .process("emptyResponseProcessor")
+                        .choice()
+                            .when(simple("${body[]} == null")) // Adjust condition based on actual error field
+                                .log("Request failed: ${body[]}")
+                            .otherwise()
+                                .log("Request was successful.")
+                        .endChoice()
+                .endDoTry()
+                .process("successResponseProcessor")
+                    .doCatch(Exception.class)
+                        .log("Exception during processing: ${exception.message}")
+                .end();
     }
 }

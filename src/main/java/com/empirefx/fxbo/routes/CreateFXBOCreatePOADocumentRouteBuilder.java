@@ -1,5 +1,6 @@
 package com.empirefx.fxbo.routes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.ValidationException;
@@ -51,21 +52,20 @@ public class CreateFXBOCreatePOADocumentRouteBuilder extends RouteBuilder {
         from("direct:fetchPOAResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
-                .log("Processed response with content type: ${header.Content-Type}")
-//                .log("Processed response : ${body}")
-                .removeHeaders("*")
-                .removeHeader("Authorization")
-                .doTry()
-                    .unmarshal().json()
-                        .choice()
-                            .when(simple("${body[error]} != null")) // Adjust condition based on actual error field
-                                .log("Request failed: ${body[error]}")
-                            .otherwise()
-                                .log("Request was successful.")
-                        .endChoice()
-                .endDoTry()
-                    .doCatch(Exception.class)
-                        .log("Exception during processing: ${exception.message}")
+                .convertBodyTo(String.class) // Convert InputStream to String
+                .process(exchange -> {
+                    String body = exchange.getIn().getBody(String.class);
+                    Map jsonMap = new ObjectMapper().readValue(body, Map.class); // Parse JSON to Map
+                    exchange.getIn().setBody(jsonMap); // Replace body with Map
+                })
+                .choice()
+                    .when(simple("${body[code]} == 400"))
+                        .log(LoggingLevel.WARN, "Processing failure response...")
+                        .process("failureResponseProcessor")
+                    .otherwise()
+                        .log(LoggingLevel.INFO, "Processing success response...")
+                        .process("successResponseProcessor")
+
                 .end();
     }
 }

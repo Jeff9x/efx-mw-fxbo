@@ -41,7 +41,7 @@ public class ValidatePOAUploadRequestProcessor implements Processor {
     }
 
     public static void validateConfig(Integer config) {
-        if (config == null || config != 7) {
+        if (config == null && config != 7) {
             throw new IllegalArgumentException("Config must be exactly 7.");
         }
     }
