@@ -28,7 +28,7 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
         rest()
                 .get("/utility/countries")
                 .description("Adapter REST Service")
-                .produces("application/json")
+                .produces(APPLICATION_JSON_VALUE)
                 .to("direct:fetchCountries");
 
         from("direct:fetchCountries").routeId("com.empirefx.request.getcountries")
@@ -44,6 +44,17 @@ public class GetFXBOCountriesRouteBuilder extends RouteBuilder {
         from("direct:fetchCountriesResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
+                .log("Received response from RabbitMQ queue: ${body}")
+                .process(exchange -> {
+                    // Convert response to a UTF-8 encoded JSON string if it's not already
+//                    String jsonResponse = new String(exchange.getIn().getBody(byte[].class), StandardCharsets.UTF_8);
+                    String jsonResponse = exchange.getIn().getBody(String.class);
+                    exchange.getIn().setBody(jsonResponse);
+                })
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log("Returning decoded JSON response to caller: ${body}")
+                .log("Processed response with content type: ${header.Content-Type}")
+                .removeHeaders("*")
                 .doTry()
                     .unmarshal().json()
                         .choice()
