@@ -47,7 +47,6 @@ public class GetFXBOUserAccountRouteBuilder extends RouteBuilder {
 
         from("direct:fetchUserAccountResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .log(LoggingLevel.INFO, "Incoming response ${body}")
                 .convertBodyTo(String.class) // Convert InputStream to String
                 .process(exchange -> {
                     String body = exchange.getIn().getBody(String.class);
@@ -55,12 +54,12 @@ public class GetFXBOUserAccountRouteBuilder extends RouteBuilder {
                     exchange.getIn().setBody(jsonMap); // Replace body with Map
                 })
                 .choice()
-                    .when(simple("${body[code]} == 400"))
+                    .when(simple("${body[code]} == 404"))
                         .log(LoggingLevel.WARN, "Processing failure response...")
-                        .process("failureResponseProcessor")
+                        .process("userAccountFailureResponseProcessor")
                     .otherwise()
                         .log(LoggingLevel.INFO, "Processing success response...")
-                        .process("userAccountFailureResponseProcessor")
+                        .process("successResponseProcessor")
                 .end();
     }
 }
