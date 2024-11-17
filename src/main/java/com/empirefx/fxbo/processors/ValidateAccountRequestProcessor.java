@@ -23,7 +23,7 @@ public class ValidateAccountRequestProcessor implements Processor {
 
         System.out.println("Incoming Request Validate: " + requestBody);
 
-        String accountId = (String) requestBody.get("accountId");
+        String accountId = (String) requestBody.get("login");
         validateAccountId(accountId);
     }
 

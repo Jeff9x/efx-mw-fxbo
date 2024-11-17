@@ -47,10 +47,9 @@ public class GetFXBOAccountBalanceRouteBuilder extends RouteBuilder {
         from("direct:fetchAccountBalanceResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
-                .process("emptyResponseProcessor")
                 .doTry()
                     .unmarshal().json()
-                    .process("emptyResponseProcessor")
+                    .process("emptyAccountBalanceResponseProcessor")
                         .choice()
                             .when(simple("${body[]} == null")) // Adjust condition based on actual error field
                                 .log("Request failed: ${body[]}")
