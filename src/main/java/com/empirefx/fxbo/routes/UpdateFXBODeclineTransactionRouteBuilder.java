@@ -57,7 +57,7 @@ public class UpdateFXBODeclineTransactionRouteBuilder extends RouteBuilder {
                     exchange.getIn().setBody(jsonMap); // Replace body with Map
                 })
                 .choice()
-                    .when(simple("${body[code]} == 400"))
+                    .when(simple("${body[code]} == 500"))
                         .log(LoggingLevel.WARN, "Processing failure response...")
                         .process("declineTransactionFailureResponseProcessor")
                     .otherwise()

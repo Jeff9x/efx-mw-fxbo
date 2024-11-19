@@ -13,29 +13,35 @@ public class DeclineTransactionFailureResponseProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        // Retrieve validation error messages from exception or initial failure payload
-        Object errorDetail = exchange.getIn().getBody();
-
-        // Retrieve the full error response
+        // Retrieve the full error response as a Map
         Map<String, Object> errorResponse = exchange.getIn().getBody(Map.class);
 
-        // Extract the main error from 'errors' -> 'errors'
-        String transactionError = null;
-        if (errorResponse.containsKey("errors")) {
-            Map<String, Object> errors = (Map<String, Object>) errorResponse.get("errors");
-            if (errors.containsKey("errors")) {
-                transactionError = ((Iterable<?>) errors.get("errors")).iterator().next().toString();
-            }
+        // Extract relevant parts from the error response
+        Integer code = (Integer) errorResponse.get("code");
+        String message = (String) errorResponse.get("message");
+        String type = (String) errorResponse.get("type");
+        String exception = null;
+
+        // Check if there is a 'debug' field and extract the 'exception' message if available
+        if (errorResponse.containsKey("debug")) {
+            Map<String, Object> debugInfo = (Map<String, Object>) errorResponse.get("debug");
+            exception = (String) debugInfo.get("exception");
         }
 
-        Map<String, Object> failureResponse = Map.of(
-                "code", 400,
-                "message", "FXBO Response Validation Failed",
-                "errors", Map.of("errorDetails", transactionError)
-        );
+        // Construct the simplified failure response
+        Map<String, Object> simplifiedFailureResponse = new HashMap<>();
+        simplifiedFailureResponse.put("code", code != null ? code : 400); // default to 400 if code is missing
+        simplifiedFailureResponse.put("message", message != null ? message : "An error occurred");
+//        simplifiedFailureResponse.put("type", type);
 
-        exchange.getIn().setBody(failureResponse);
-        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, 400);
+        // Include the exception message if available
+        if (exception != null) {
+            simplifiedFailureResponse.put("errors", exception);
+        }
+
+        // Set the response body and headers
+        exchange.getIn().setBody(simplifiedFailureResponse);
+        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, code != null ? code : 400);
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
     }
 }
