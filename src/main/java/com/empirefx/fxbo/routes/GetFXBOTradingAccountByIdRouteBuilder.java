@@ -5,6 +5,8 @@ import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 public class GetFXBOTradingAccountByIdRouteBuilder extends RouteBuilder {
 
@@ -12,10 +14,15 @@ public class GetFXBOTradingAccountByIdRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
 
 // Global exception handler for validation errors
-        onException(ValidationException.class)
-                .log("Validation failed: ${exception.message}")
+        onException(IllegalArgumentException.class)
                 .handled(true)
-                .setBody(simple("Validation failed: ${exception.message}"));
+                .log(LoggingLevel.ERROR, "Validation error: ${exception.message}")
+                .process(exchange -> {
+                    String errorMessage = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, IllegalArgumentException.class).getMessage();
+                    exchange.getIn().setBody(Map.of("code", 400, "message", errorMessage));
+                    exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
+                    exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, 400);
+                });
 
         rest()
                 .get("/trading-accounts/{accountId}")
@@ -39,10 +46,9 @@ public class GetFXBOTradingAccountByIdRouteBuilder extends RouteBuilder {
         from("direct:fetchIndividualTradingAccountResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
-                .process("emptyResponseProcessor")
                 .doTry()
                     .unmarshal().json()
-                    .process("emptyResponseProcessor")
+                    .process("emptyAccountBalanceResponseProcessor")
                         .choice()
                             .when(simple("${body[]} == null")) // Adjust condition based on actual error field
                                 .log("Request failed: ${body[]}")
