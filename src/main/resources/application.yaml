@@ -110,6 +110,7 @@ atomic:
   pathAccount: ${ATOMIC_PATH:/rest/accounts/new}
   pathTradingAccounts: ${ATOMIC_PATH:/rest/accounts}
   pathUserAccount: ${ATOMIC_PATH:/rest/users}
+  pathDocuments: ${ATOMIC_PATH:/rest/documents/update}
   pathFxRates: ${ATOMIC_PATH:/fxrate}
   timeout: ${ATOMIC_TIMEOUT:3000}
   protocol: ${ATOMIC_PROTOCOL:https}
@@ -121,6 +122,7 @@ atomic:
   uriTradingAccounts: ${atomic.protocol}://${atomic.host}${atomic.pathTradingAccounts}${atomic.uri-paramsAccount}
   uriFxRates: ${atomic.protocol}://${atomic.hostMock}${atomic.pathFxRates}${atomic.uri-paramsAccount}
   uriUserAccount: ${atomic.protocol}://${atomic.host}${atomic.pathUserAccount}
+  uriUpdateDocuments: ${atomic.protocol}://${atomic.host}${atomic.pathDocuments}${atomic.uri-paramsAccount}
 
 atomic1:
   host: ${ATOMIC_HOST:demo.fxbackoffice.com}
