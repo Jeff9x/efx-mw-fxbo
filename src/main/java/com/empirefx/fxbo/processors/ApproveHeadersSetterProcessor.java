@@ -35,6 +35,15 @@ public class ApproveHeadersSetterProcessor implements Processor {
 
         System.out.println("Incoming Caller IP :"+ipRemote);
 
+        String crmTransactionId = exchange.getIn().getHeader("crmTransactionId", String.class);
+        System.out.println("Crm Transaction ID :"+crmTransactionId);
+
+
+
+        String finaUrl = pathApproveTransaction+crmTransactionId+"/approve"+uriParamsApproveTransaction;
+        System.out.println("Fina URL :"+finaUrl);
+        exchange.getIn().setHeader("finaUrl", finaUrl);
+
 
     }
 
