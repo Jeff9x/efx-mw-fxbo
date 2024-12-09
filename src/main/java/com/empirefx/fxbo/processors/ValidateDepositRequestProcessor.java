@@ -23,7 +23,7 @@ public class ValidateDepositRequestProcessor implements Processor {
 
         System.out.println("Incoming Request Validate: " + requestBody);
 
-        Integer amount = (Integer) requestBody.get("amount");
+        Double amount = (Double) requestBody.get("amount");
         validateAmount(amount);
 
         Integer sid = (Integer) requestBody.get("sid");
@@ -42,7 +42,7 @@ public class ValidateDepositRequestProcessor implements Processor {
         validateComment(comment);
     }
 
-    public static void validateAmount(Integer amount) {
+    public static void validateAmount(Double amount) {
         if (amount == null || amount <= 0) {
             throw new IllegalArgumentException("Amount must be a positive integer.");
         }
