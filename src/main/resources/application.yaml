@@ -125,6 +125,7 @@ atomic:
   uriUserAccount: ${atomic.protocol}://${atomic.host}${atomic.pathUserAccount}
   uriUpdateDocuments: ${atomic.protocol}://${atomic.host}${atomic.pathDocuments}${atomic.uri-paramsAccount}
   uriPlatformServers: ${atomic.protocol}://${atomic.host}${atomic.pathPlatformServers}${atomic.uri-params}
+  uriPlatformServer: ${atomic.protocol}://${atomic.host}${atomic.pathPlatformServers}
 
 atomic1:
   host: ${ATOMIC_HOST:demo.fxbackoffice.com}
