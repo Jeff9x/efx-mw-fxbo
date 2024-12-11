@@ -28,8 +28,8 @@ public class ValidateCurrencyConversionRequestProcessor implements Processor {
         String toCurrency = (String) requestBody.get("toCurrency");
         validateToCurrency(toCurrency);
 
-        Double amount = (Double) requestBody.get("amount");
-        validateAmount(amount);
+//        Double amount = (Double) requestBody.get("amount");
+//        validateAmount(amount);
     }
 
     public static void validateFromCurrency(String fromCurrency) {
@@ -50,12 +50,12 @@ public class ValidateCurrencyConversionRequestProcessor implements Processor {
         }
     }
 
-    public static void validateAmount(Double amount) {
-        if (amount == null) {
-            throw new IllegalArgumentException("Amount must not be null.");
-        }
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be a positive number.");
-        }
-    }
+//    public static void validateAmount(Double amount) {
+//        if (amount == null) {
+//            throw new IllegalArgumentException("Amount must not be null.");
+//        }
+//        if (amount <= 0) {
+//            throw new IllegalArgumentException("Amount must be a positive number.");
+//        }
+//    }
 }

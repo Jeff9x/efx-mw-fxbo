@@ -33,14 +33,10 @@ public class GetFXBOFxRatesRouteBuilder extends RouteBuilder {
 
         from("direct:fetchFxRates").routeId("com.empirefx.request.dispatchRequest31")
                 .noStreamCaching().noMessageHistory().noTracing()
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
-                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .process("validateCurrencyConversionRequestProcessor")
+                .setHeader("Content-Type", constant("application/json"))
+                .setHeader("Accept", constant("application/json"))
                 .process("headersSetterProcessor")
-                .setBody(simple("${body}"))
-                .convertBodyTo(String.class)
                 .marshal().json()
-                .log(LoggingLevel.INFO, "Body Set ${body}")
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Fetch Fx Rates Endpoint :: Request :: {{atomic.uriFxRates}}")
                 .enrich().simple("{{atomic.uriFxRates}}").id("callServiceBack31")
@@ -48,6 +44,7 @@ public class GetFXBOFxRatesRouteBuilder extends RouteBuilder {
 
         from("direct:fetchFxRatesResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .log(LoggingLevel.INFO, "Incoming response ${body}")
                 .convertBodyTo(String.class) // Convert InputStream to String
                 .process(exchange -> {
                     String body = exchange.getIn().getBody(String.class);

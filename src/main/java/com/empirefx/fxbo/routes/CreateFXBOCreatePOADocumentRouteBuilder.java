@@ -42,6 +42,13 @@ public class CreateFXBOCreatePOADocumentRouteBuilder extends RouteBuilder {
                 .process("validatePOAUploadRequestProcessor")
                 .process("headersSetterProcessor")
                 .process("imagePoaUploadRequestProcessor")
+                .process(exchange -> {
+                    String message = "Processing message: " + exchange.getIn().getBody();
+                    java.nio.file.Files.write(java.nio.file.Paths.get("custom-log.log"),
+                            (message + System.lineSeparator()).getBytes(),
+                            java.nio.file.StandardOpenOption.CREATE,
+                            java.nio.file.StandardOpenOption.APPEND);
+                })
                 .doTry()
 //                .log("Processed request To Backend : ${body}")
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Upload POA Request :: {{atomic1.uriPOI}}")
