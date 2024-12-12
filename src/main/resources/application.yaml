@@ -112,7 +112,7 @@ atomic:
   pathUserAccount: ${ATOMIC_PATH:/rest/users}
   pathDocuments: ${ATOMIC_PATH:/rest/documents/update}
   pathFxRates: ${ATOMIC_PATH:/rest/rates/get-live}
-  timeout: ${ATOMIC_TIMEOUT:3000}
+  timeout: ${ATOMIC_TIMEOUT:6000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
   uri-paramsAccount: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method2}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
@@ -138,7 +138,7 @@ atomic1:
   pathFetchTransactions: ${ATOMIC_PATH:/rest/transactions}
   pathDecline: ${ATOMIC_PATH:/rest/transactions/decline}
   pathAccountBalance: ${ATOMIC_PATH:/rest/accounts/check-balance}
-  timeout: ${ATOMIC_TIMEOUT:3000}
+  timeout: ${ATOMIC_TIMEOUT:6000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-paramsUser: /new?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}

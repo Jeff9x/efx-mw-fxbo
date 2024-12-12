@@ -48,9 +48,9 @@ public class AppTokenJava {
             builder.append("    \"user\": ").append(user).append(",\n");
             builder.append("    \"status\": \"").append(status).append("\",\n");
             builder.append("    \"data\": {\n");
-            builder.append("        \"expires_at\": \"").append(expiresAt).append("\",\n");
+            builder.append("        \"date_of_expiry\": \"").append(expiresAt).append("\",\n");
             builder.append("        \"document_number\": \"").append(documentNumber).append("\",\n");
-            builder.append("        \"type\": \"").append(type).append("\",\n");
+            builder.append("        \"type\": \"").append(type.toLowerCase()).append("\",\n");
             builder.append("        \"country_of_issue\": \"").append(countryOfIssue).append("\",\n");
 
             // Append front_side array

@@ -41,7 +41,7 @@ public class ValidatePOIDocumentUploadRequestProcessor implements Processor {
     }
 
     public static void validateConfig(Integer config) {
-        if (config == null || config != 6) {
+        if (config == null || config != 4) {
             throw new IllegalArgumentException("Config must be exactly 6.");
         }
     }
