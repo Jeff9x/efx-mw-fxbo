@@ -96,6 +96,7 @@ adaptive:
   token: Bearer aeb88c9042d814eb7aaf4ca4d35568339a12945346f3a68509f7b28621b7b61efb13fa4163004a3e04365c39e9f589221987767d607dbd8a46b135a8
   POIConfig: 4
   POAConfig: 5
+  emailConfig : 1
 #  path: ${ATOMIC_PATH:/rest/dict/countries}
 #  timeout: ${ATOMIC_TIMEOUT:3000}
 #  protocol: ${ATOMIC_PROTOCOL:https}
@@ -143,6 +144,7 @@ atomic1:
   pathFetchTransactions: ${ATOMIC_PATH:/rest/transactions}
   pathDecline: ${ATOMIC_PATH:/rest/transactions/decline}
   pathAccountBalance: ${ATOMIC_PATH:/rest/accounts/check-balance}
+  pathSendEmail: ${ATOMIC_PATH:/rest/user/send-email}
   timeout: ${ATOMIC_TIMEOUT:6000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
@@ -159,6 +161,7 @@ atomic1:
   uriFetchTransactions: ${atomic1.protocol}://${atomic1.host}${atomic1.pathFetchTransactions}${atomic1.uri-params}
   uriDeclineTransaction: ${atomic1.protocol}://${atomic1.host}${atomic1.pathDecline}${atomic1.uri-paramsDeclineTransaction}
   uriAccountBalance: ${atomic1.protocol}://${atomic1.host}${atomic1.pathAccountBalance}${atomic1.uri-params}
+  urisendEmail: ${atomic1.protocol}://${atomic1.host}${atomic1.pathSendEmail}${atomic1.uri-params}
 
 ehf:
   host: ${EHF_HOST:localhost}
