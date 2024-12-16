@@ -21,8 +21,8 @@ public class RateProcessor implements Processor {
 
         // Extract relevant fields from the "rate" object
         JsonNode rateNode = incomingJson.path("rate");
-        String fromCurrency = rateNode.path("fromCurrency").asText();
-        String toCurrency = rateNode.path("toCurrency").asText();
+        String fromCurrency = rateNode.path("toCurrency").asText();
+        String toCurrency = rateNode.path("fromCurrency").asText();
         String source = rateNode.path("source").asText();
         double rate = rateNode.path("rate").asDouble();
 
