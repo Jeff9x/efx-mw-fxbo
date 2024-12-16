@@ -94,6 +94,8 @@ adaptive:
   camelHttpMethod: CamelHttpMethod
   authorization: Authorization
   token: Bearer aeb88c9042d814eb7aaf4ca4d35568339a12945346f3a68509f7b28621b7b61efb13fa4163004a3e04365c39e9f589221987767d607dbd8a46b135a8
+  POIConfig: 4
+  POAConfig: 5
 #  path: ${ATOMIC_PATH:/rest/dict/countries}
 #  timeout: ${ATOMIC_TIMEOUT:3000}
 #  protocol: ${ATOMIC_PROTOCOL:https}

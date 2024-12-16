@@ -36,7 +36,7 @@ public class AppTokenJava {
         byte[] fileContent = FileUtils.readFileToByteArray(new File(filePath));
         return Base64.getEncoder().encodeToString(fileContent);
     }
-    public static String toString (String config,String user,String status,String expiresAt, String documentNumber, String type, String countryOfIssue,
+    public static String toString (Integer config,String user,String status,String expiresAt, String documentNumber, String type, String countryOfIssue,
                                    String frontFile, String frontName,String backFile ,String backName, String uploadedByClient)throws IOException {
         // Method to construct the payload
             // Create a StringBuilder to build the payload

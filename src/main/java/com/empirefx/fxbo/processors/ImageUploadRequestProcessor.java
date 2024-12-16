@@ -7,6 +7,7 @@ import org.apache.camel.Processor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,9 @@ public class ImageUploadRequestProcessor implements Processor {
     }
     String encodeFront;
     String encodeBack;
-    String config;
+    @Value("${adaptive.POIConfig}")
+    private Integer config;
+//    Integer config;
     String user;
     String status;
     String expiresAt;
@@ -64,7 +67,8 @@ public class ImageUploadRequestProcessor implements Processor {
         // Parse the JSON payload
         JSONObject jsonObject = new JSONObject(requestBody);
         System.out.println("Incoming JSON: " + jsonObject);
-        config = String.valueOf(Integer.parseInt(String.valueOf(Integer.valueOf(requestBody.get("config").toString()))));
+//        config = String.valueOf(Integer.parseInt(String.valueOf(Integer.valueOf(requestBody.get("config").toString()))));
+//        config = 4;
         user = String.valueOf(Integer.parseInt(String.valueOf(Integer.valueOf(requestBody.get("user").toString()))));
         System.out.println("Incoming User: " + user);
         uploadedByClient = Boolean.parseBoolean(requestBody.get("uploadedByClient").toString());

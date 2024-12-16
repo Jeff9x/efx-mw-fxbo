@@ -7,6 +7,7 @@ import org.apache.camel.Processor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,8 @@ public class ImagePoaUploadRequestProcessor implements Processor {
     }
     String encodeFront;
     String encodeBack;
+    @Value("${adaptive.POIConfig}")
+//    private Integer config;
     String config;
     String user;
     String status;

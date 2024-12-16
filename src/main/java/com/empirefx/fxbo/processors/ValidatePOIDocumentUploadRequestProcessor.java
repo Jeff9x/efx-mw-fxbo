@@ -24,8 +24,8 @@ public class ValidatePOIDocumentUploadRequestProcessor implements Processor {
 
         System.out.println("Incoming Request Validate: " + requestBody);
 
-        Integer config = (Integer) requestBody.get("config");
-        validateConfig(config);
+//        Integer config = (Integer) requestBody.get("config");
+//        validateConfig(config);
 
         Integer user = (Integer) requestBody.get("user");
         validateUser(user);
@@ -40,11 +40,11 @@ public class ValidatePOIDocumentUploadRequestProcessor implements Processor {
         validateUploadedByClient(uploadedByClient);
     }
 
-    public static void validateConfig(Integer config) {
-        if (config == null || config != 4) {
-            throw new IllegalArgumentException("Config must be exactly 6.");
-        }
-    }
+//    public static void validateConfig(Integer config) {
+//        if (config == null || config != 4) {
+//            throw new IllegalArgumentException("Config must be exactly 6.");
+//        }
+//    }
 
     public static void validateUser(Integer user) {
         if (user == null || user <= 0) {
