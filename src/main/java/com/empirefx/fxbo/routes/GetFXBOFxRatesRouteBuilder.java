@@ -43,39 +43,10 @@ public class GetFXBOFxRatesRouteBuilder extends RouteBuilder {
                 .to("direct:fetchFxRatesResponse");
 
         from("direct:fetchFxRatesResponse")
-                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .log(LoggingLevel.INFO, "Raw Incoming Body: ${body}")
-                .convertBodyTo(String.class) // Ensure the body is a String
-                .process(exchange -> {
-                    String body = exchange.getIn().getBody(String.class);
-
-                    if (body == null || body.trim().isEmpty()) {
-                        // Handle empty payload
-                        exchange.getIn().setHeader("isFailure", true);
-                        exchange.getIn().setBody(Map.of("message", "Empty response from backend"));
-                        return; // Skip further processing
-                    }
-
-                    try {
-                        // Parse the JSON if body is not empty
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        Map<String, Object> jsonMap = objectMapper.readValue(body, Map.class);
-                        exchange.getIn().setBody(jsonMap);
-                        exchange.getIn().setHeader("isFailure", false);
-                    } catch (Exception e) {
-                        // Handle JSON parsing errors
-                        exchange.getIn().setHeader("isFailure", true);
-                        exchange.getIn().setBody(Map.of("message", "Invalid JSON response", "rawBody", body));
-                    }
-                })
-                .choice()
-                .when(header("isFailure").isEqualTo(true))
-                .log(LoggingLevel.WARN, "Processing failure response...")
-                .process("failureResponseProcessor")
-                .otherwise()
-                .log(LoggingLevel.INFO, "Processing success response...")
-                .marshal().json()
-                .process("rateProcessor")
-                .end();
-    }
-}
+            .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                        .setHeader("Accept", constant("application/json"))
+            .log(LoggingLevel.INFO, "Raw Incoming Body: ${body}")
+            .process("rateProcessor")
+            .end();
+            }
+        }

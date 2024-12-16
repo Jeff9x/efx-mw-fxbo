@@ -1,4 +1,5 @@
 package com.empirefx.fxbo.processors;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -25,15 +26,15 @@ public class RateProcessor implements Processor {
         String source = rateNode.path("source").asText();
         double rate = rateNode.path("rate").asDouble();
 
-        // Create the outgoing JSON payload
+        // Create the outgoing JSON payload as an ObjectNode
         ObjectNode responseJson = objectMapper.createObjectNode();
         responseJson.put("fromCurrency", fromCurrency);
         responseJson.put("toCurrency", toCurrency);
         responseJson.put("source", capitalizeFirstLetter(source));
         responseJson.put("rate", rate);
 
-        // Set the outgoing payload as the response
-        exchange.getIn().setBody(responseJson.toString());
+        // Set the outgoing payload as a JSON object (not a string)
+        exchange.getIn().setBody(responseJson);
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
     }
 
