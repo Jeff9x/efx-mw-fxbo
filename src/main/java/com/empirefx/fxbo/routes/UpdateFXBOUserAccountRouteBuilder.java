@@ -38,7 +38,7 @@ public class UpdateFXBOUserAccountRouteBuilder extends RouteBuilder {
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
-                .process("validateUserVerificationRequestProcessor")
+//                .process("validateUserVerificationRequestProcessor")
                 .process("headersSetterProcessor")
                 .marshal().json()
                 .doTry()
