@@ -21,15 +21,15 @@ public class RateProcessor implements Processor {
 
         // Extract relevant fields from the "rate" object
         JsonNode rateNode = incomingJson.path("rate");
-        String fromCurrency = rateNode.path("toCurrency").asText();
-        String toCurrency = rateNode.path("fromCurrency").asText();
+        String fromCurrency = rateNode.path("fromCurrency").asText();
+        String toCurrency = rateNode.path("toCurrency").asText();
         String source = rateNode.path("source").asText();
         double rate = rateNode.path("rate").asDouble();
 
         // Create the outgoing JSON payload as an ObjectNode
         ObjectNode responseJson = objectMapper.createObjectNode();
-        responseJson.put("fromCurrency", fromCurrency);
-        responseJson.put("toCurrency", toCurrency);
+        responseJson.put("fromCurrency", toCurrency);
+        responseJson.put("toCurrency", fromCurrency);
         responseJson.put("source", capitalizeFirstLetter(source));
         responseJson.put("rate", rate);
 
