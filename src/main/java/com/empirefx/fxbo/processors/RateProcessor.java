@@ -28,8 +28,8 @@ public class RateProcessor implements Processor {
 
         // Create the outgoing JSON payload as an ObjectNode
         ObjectNode responseJson = objectMapper.createObjectNode();
-        responseJson.put("fromCurrency", toCurrency);
-        responseJson.put("toCurrency", fromCurrency);
+        responseJson.put("fromCurrency",fromCurrency);
+        responseJson.put("toCurrency", toCurrency);
         responseJson.put("source", capitalizeFirstLetter(source));
         responseJson.put("rate", rate);
 
