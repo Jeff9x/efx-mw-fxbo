@@ -41,20 +41,8 @@ public class GetFXBOTransactionsRouteBuilder extends RouteBuilder {
         from("direct:fetchTransactionsResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
-                .process("emptyResponseProcessor")
-                .doTry()
-                    .unmarshal().json()
-                    .process("emptyTransactionsResponseProcessor")
-                        .choice()
-                            .when(simple("${body[]} == null")) // Adjust condition based on actual error field
-                                .log("Request failed: ${body[]}")
-                            .otherwise()
-                                .log("Request was successful.")
-                        .endChoice()
-                .endDoTry()
+                .unmarshal().json()
                 .process("successResponseProcessor")
-                    .doCatch(Exception.class)
-                        .log("Exception during processing: ${exception.message}")
                 .end();
     }
 }
