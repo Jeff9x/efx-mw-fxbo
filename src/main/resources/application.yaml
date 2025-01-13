@@ -5,7 +5,7 @@ springdoc:
   api-docs:
     path: /api-docs
 server:
-  port: 8080
+  port: 8081
   address: 0.0.0.0
 #  ssl:
 #    key-store-type: PKCS12
@@ -24,7 +24,7 @@ camel:
       max-total-connections: "2600"
   rest:
     component: servlet
-    port: ${server.port:8080}
+    port: ${server.port:8081}
   servlet:
     mapping:
       context-path: ${API_PATH_VERSION:/api/v1/*}
@@ -64,7 +64,7 @@ management:
   security:
     enabled: false
   server:
-    port: 8080
+    port: 8081
 #    address: 0.0.0.0
 
   rabbitmq:
@@ -97,6 +97,7 @@ adaptive:
   POIConfig: 4
   POAConfig: 5
   emailConfig : 1
+  resetPasswordConfig: main
 #  path: ${ATOMIC_PATH:/rest/dict/countries}
 #  timeout: ${ATOMIC_TIMEOUT:3000}
 #  protocol: ${ATOMIC_PROTOCOL:https}
@@ -104,6 +105,7 @@ adaptive:
 #  uri: ${atomic.protocol}://${atomic.host}${atomic.path}${atomic.uri-params}
 
 atomic:
+  #  host: ${ATOMIC_HOST:demo.fxbackoffice.com}
   host: ${ATOMIC_HOST:portal.empirefx.com}
   hostMock: ${ATOMIC_HOST:portal.empirefx.com}
   method: GET
@@ -134,6 +136,7 @@ atomic1:
   host: ${ATOMIC_HOST:portal.empirefx.com}
   method: POST
   methodPatch: PATCH
+  methodPut: PUT
   pathUser: ${ATOMIC_PATH:/rest/users/new}
   pathUpdateUser: ${ATOMIC_PATH:/rest/users/update}
   path: ${ATOMIC_PATH:/rest/accounts/new}
@@ -145,12 +148,14 @@ atomic1:
   pathDecline: ${ATOMIC_PATH:/rest/transactions/decline}
   pathAccountBalance: ${ATOMIC_PATH:/rest/accounts/check-balance}
   pathSendEmail: ${ATOMIC_PATH:/rest/user/send-email}
+  pathResetPassword: ${ATOMIC_PATH:/rest/accounts/reset-password/}
   timeout: ${ATOMIC_TIMEOUT:6000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-paramsUser: /new?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-paramsApproveTransaction: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPatch}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-paramsDeclineTransaction: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPatch}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
+  uri-paramsResetPassword: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPut}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri: ${atomic1.protocol}://${atomic1.host}${atomic1.path}${atomic1.uri-params}
   uriPOI: ${atomic1.protocol}://${atomic1.host}${atomic1.pathPOI}${atomic1.uri-paramsUser}
   uriUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUser}${atomic1.uri-params}
@@ -162,6 +167,7 @@ atomic1:
   uriDeclineTransaction: ${atomic1.protocol}://${atomic1.host}${atomic1.pathDecline}${atomic1.uri-paramsDeclineTransaction}
   uriAccountBalance: ${atomic1.protocol}://${atomic1.host}${atomic1.pathAccountBalance}${atomic1.uri-params}
   urisendEmail: ${atomic1.protocol}://${atomic1.host}${atomic1.pathSendEmail}${atomic1.uri-params}
+  uriResetPassword: ${atomic1.protocol}://${atomic1.host}${atomic1.pathResetPassword}
 
 ehf:
   host: ${EHF_HOST:localhost}
