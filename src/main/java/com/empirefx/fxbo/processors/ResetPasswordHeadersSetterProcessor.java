@@ -64,7 +64,7 @@ public class ResetPasswordHeadersSetterProcessor implements Processor {
         exchange.getIn().setHeader("finaUrl", finaUrl);
 
         // Construct the final payload
-        String finalPayload = AppTokenJava.toStringResetPassword("main", "1#Password");
+        String finalPayload = AppTokenJava.toStringResetPassword(config, newPassword);
         System.out.println("Final Payload: " + finalPayload);
         // Set the JSON string back to the exchange body for further processing
         exchange.getIn().setBody(finalPayload);
