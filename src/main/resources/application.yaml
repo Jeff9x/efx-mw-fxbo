@@ -5,7 +5,7 @@ springdoc:
   api-docs:
     path: /api-docs
 server:
-  port: 8081
+  port: 8080
   address: 0.0.0.0
 #  ssl:
 #    key-store-type: PKCS12
@@ -24,7 +24,7 @@ camel:
       max-total-connections: "2600"
   rest:
     component: servlet
-    port: ${server.port:8081}
+    port: ${server.port:8080}
   servlet:
     mapping:
       context-path: ${API_PATH_VERSION:/api/v1/*}
@@ -64,7 +64,7 @@ management:
   security:
     enabled: false
   server:
-    port: 8081
+    port: 8080
 #    address: 0.0.0.0
 
   rabbitmq:
@@ -173,7 +173,7 @@ ehf:
   host: ${EHF_HOST:localhost}
   method: POST
   path: /api/ehf/fetchKeys
-  port: ${EHF_PORT:8081}
+  port: ${EHF_PORT:8080}
   protocol: ${EHF_PROTOCOL:http}
   uri: ${ehf.protocol}://${ehf.host}:${ehf.port}${ehf.path}${ehf.uri-params}
   uri-params: ?bridgeEndpoint=true&httpMethod=${ehf.method}&throwExceptionOnFailure=true
