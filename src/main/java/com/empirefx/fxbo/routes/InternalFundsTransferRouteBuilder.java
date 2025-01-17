@@ -43,7 +43,6 @@ public class InternalFundsTransferRouteBuilder extends RouteBuilder {
 //                .process("validateFundsTransferRequestProcessor") // Validate the request payload
                 .process("headersSetterProcessor") // Add necessary headers
                 .process("internalFundsTransferProcessor")
-                .marshal().json()
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Internal Funds Transfer Request :: {{atomic1.uriInternalFundsTransfer}}")
                 .enrich().simple("{{atomic1.uriInternalFundsTransfer}}").id("callFundsTransferService")
