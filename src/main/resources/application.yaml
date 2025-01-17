@@ -149,6 +149,7 @@ atomic1:
   pathAccountBalance: ${ATOMIC_PATH:/rest/accounts/check-balance}
   pathSendEmail: ${ATOMIC_PATH:/rest/user/send-email}
   pathResetPassword: ${ATOMIC_PATH:/rest/accounts/reset-password/}
+  pathInternalFundsTransfer: ${ATOMIC_PATH:/rest/transfer}
   timeout: ${ATOMIC_TIMEOUT:6000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
@@ -156,6 +157,7 @@ atomic1:
   uri-paramsApproveTransaction: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPatch}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-paramsDeclineTransaction: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPatch}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-paramsResetPassword: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPut}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
+  uri-internalFundsTransfer: /new?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri: ${atomic1.protocol}://${atomic1.host}${atomic1.path}${atomic1.uri-params}
   uriPOI: ${atomic1.protocol}://${atomic1.host}${atomic1.pathPOI}${atomic1.uri-paramsUser}
   uriUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUser}${atomic1.uri-params}
@@ -168,6 +170,7 @@ atomic1:
   uriAccountBalance: ${atomic1.protocol}://${atomic1.host}${atomic1.pathAccountBalance}${atomic1.uri-params}
   urisendEmail: ${atomic1.protocol}://${atomic1.host}${atomic1.pathSendEmail}${atomic1.uri-params}
   uriResetPassword: ${atomic1.protocol}://${atomic1.host}${atomic1.pathResetPassword}
+  uriInternalFundsTransfer: ${atomic1.protocol}://${atomic1.host}${atomic1.pathInternalFundsTransfer}${atomic1.uri-internalFundsTransfer}
 
 ehf:
   host: ${EHF_HOST:localhost}
