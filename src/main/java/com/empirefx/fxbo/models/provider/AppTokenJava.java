@@ -127,6 +127,17 @@ public static String toStringPoa (String config,String user,String status,String
 
         return builder.toString();
     }
+    public static String toStringChangeLeverage(int leverage) {
+        // Use a StringBuilder to build the payload
+        StringBuilder builder = new StringBuilder();
+
+        // Start building the JSON payload with proper double quotes
+        builder.append("{\n");
+        builder.append("    \"leverage\": ").append(leverage).append("\n");
+        builder.append("}");
+
+        return builder.toString();
+    }
 }
 
 

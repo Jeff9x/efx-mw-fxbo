@@ -5,7 +5,7 @@ springdoc:
   api-docs:
     path: /api-docs
 server:
-  port: 8080
+  port: 8081
   address: 0.0.0.0
 #  ssl:
 #    key-store-type: PKCS12
@@ -24,7 +24,7 @@ camel:
       max-total-connections: "2600"
   rest:
     component: servlet
-    port: ${server.port:8080}
+    port: ${server.port:8081}
   servlet:
     mapping:
       context-path: ${API_PATH_VERSION:/api/v1/*}
@@ -64,7 +64,7 @@ management:
   security:
     enabled: false
   server:
-    port: 8080
+    port: 8081
 #    address: 0.0.0.0
 
   rabbitmq:
@@ -150,6 +150,7 @@ atomic1:
   pathSendEmail: ${ATOMIC_PATH:/rest/user/send-email}
   pathResetPassword: ${ATOMIC_PATH:/rest/accounts/reset-password/}
   pathInternalFundsTransfer: ${ATOMIC_PATH:/rest/transfer}
+  pathChangeLeverage: ${ATOMIC_PATH:/rest/accounts/}
   timeout: ${ATOMIC_TIMEOUT:6000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
@@ -171,12 +172,13 @@ atomic1:
   urisendEmail: ${atomic1.protocol}://${atomic1.host}${atomic1.pathSendEmail}${atomic1.uri-params}
   uriResetPassword: ${atomic1.protocol}://${atomic1.host}${atomic1.pathResetPassword}
   uriInternalFundsTransfer: ${atomic1.protocol}://${atomic1.host}${atomic1.pathInternalFundsTransfer}${atomic1.uri-internalFundsTransfer}
+  uriChangeLeverage: ${atomic1.protocol}://${atomic1.host}${atomic1.pathChangeLeverage}
 
 ehf:
   host: ${EHF_HOST:localhost}
   method: POST
   path: /api/ehf/fetchKeys
-  port: ${EHF_PORT:8080}
+  port: ${EHF_PORT:8081}
   protocol: ${EHF_PROTOCOL:http}
   uri: ${ehf.protocol}://${ehf.host}:${ehf.port}${ehf.path}${ehf.uri-params}
   uri-params: ?bridgeEndpoint=true&httpMethod=${ehf.method}&throwExceptionOnFailure=true
