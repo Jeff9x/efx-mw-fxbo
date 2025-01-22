@@ -41,7 +41,7 @@ public class ChangeLeverageRouteBuilder extends RouteBuilder {
                 .removeHeaders("CamelHttp*")
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Change Leverage Request :: ${header.finaUrl}")
-//                .enrich().simple("${header.finaUrl}").id("callServiceBackChangeLeverage")
+                .enrich().simple("${header.finaUrl}").id("callServiceBackChangeLeverage")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .to("direct:fetchChangeLeverageResponse");
 
