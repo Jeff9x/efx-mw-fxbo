@@ -1,0 +1,131 @@
+options:
+  machineType: 'E2_HIGHCPU_32'
+logsBucket: 'gs://${_LOGS_BUCKET}/logs'
+
+# Build and tag using commit sha
+steps:
+- name: 'maven:3.8.1-openjdk-17-slim'
+  entrypoint: bash
+  id: "Maven Build"
+  args: [
+    "-c",
+      "echo '### Maven Build: ###' && \
+      mvn clean install"
+  ]
+
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: bash
+  id: 'Docker Image Build and Push'
+  args: [
+    "-c",
+      "echo '### Build Docker Image: ###' && \
+      docker buildx build --platform linux/amd64 -t '${_ARTIFACT_REGISTRY}/${_SERVICE_IMAGE_NAME}:${SHORT_SHA}' . && \
+      echo '### Push Docker Image: ###' && \
+      docker push '${_ARTIFACT_REGISTRY}/${_SERVICE_IMAGE_NAME}:${SHORT_SHA}'"
+  ]
+
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  # Step 2: Cloud Deploy Release Creation with Lock Mechanism
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: bash
+  id: "Cloud Deploy Release"
+  args:
+    - "-c"
+    - |
+      lock_file="gs://${_LOGS_BUCKET}/releaselock-${SHORT_SHA}.lock" 
+        
+      # Check if lock exists
+      if gsutil -q stat "$lock_file"; then
+        echo "Release for ${SHORT_SHA} is already in progress."
+        exit 0
+      fi
+
+      # Create lock
+      gsutil cp /dev/null "$lock_file"
+
+      # Check if release already exists
+      release_list=$(gcloud deploy releases list --delivery-pipeline=${_DELIVERY_PIPELINE} --region=${_REGION} --project ${_PROJECT_ID} --filter="annotations.commitId ~ \"^${SHORT_SHA}$\"" --uri)
+      if [[ ! -z $release_list ]]; then
+        echo "Release already exists: release-${SHORT_SHA}"
+      else
+        echo "### Create Cloud Deploy Release: ###"
+        gcloud deploy releases create release-${SHORT_SHA} \
+          --project=${_PROJECT_ID} \
+          --region=${_REGION} \
+          --delivery-pipeline=${_DELIVERY_PIPELINE} \
+          --skaffold-file=./deployments/cicd_configs/skaffold.yaml \
+          --annotations="commitId=${SHORT_SHA}" \
+          --images="${_SERVICE_NAME}=${_ARTIFACT_REGISTRY}/${_SERVICE_IMAGE_NAME}:${SHORT_SHA}" \
+          --disable-initial-rollout
+      fi
+
+      # Remove lock after release creation
+      gsutil rm "$lock_file"
+
+  # Step 3: Cloud Deploy Rollout Based on Branch and Environment
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: bash
+  id: "Cloud Deploy Rollout"
+  args:
+    - "-c"
+    - |
+      echo "Processing branch: ${BRANCH_NAME}"
+        
+      # Determine target and phase based on branch type and environment
+      case "${BRANCH_NAME}" in
+        hotfix/*)
+          target="prod"
+          phase="canary"
+          ;;
+        refine/*)
+          target="stage"
+          phase="canary"
+          ;;
+        stage)
+          target="stage"
+          phase="stable"
+          ;;
+        dev/*)
+          target="dev"
+          phase="stable"
+          ;;
+        master)
+          target="prod"
+          phase="stable"
+          ;;
+        *)
+          echo "Unknown branch type: ${BRANCH_NAME}"
+          exit 1
+          ;;
+      esac
+
+      # Check if rollout already exists for determined target and phase
+      rollout_list=$(gcloud deploy rollouts list --delivery-pipeline=${_DELIVERY_PIPELINE} --release=release-${SHORT_SHA} --region=${_REGION} --filter="annotations.commitId ~ \"^${SHORT_SHA}$\" AND annotations.target:${target}" --uri)
+        
+      if [[ ! -z $rollout_list ]]; then
+        # Check for canary phase if it exists
+        canary_list=$(gcloud deploy rollouts list --delivery-pipeline=${_DELIVERY_PIPELINE} --release=release-${SHORT_SHA} --region=${_REGION} --filter="annotations.commitId ~ \"^${SHORT_SHA}$\" AND annotations.target:${target} AND phases.id:canary" --uri)
+        if [[ ! -z $canary_list ]]; then
+          # Advance to stable phase
+          gcloud deploy rollouts advance rollout-to-${target}-${SHORT_SHA} \
+            --release=release-${SHORT_SHA} \
+            --project=${_PROJECT_ID} \
+            --region=${_REGION} \
+            --delivery-pipeline=${_DELIVERY_PIPELINE} \
+            --phase-id=stable
+        else
+          echo "Rollout already exists: rollout-to-${target}-${phase}-${SHORT_SHA}"
+        fi
+      else
+        # Initiate a new rollout starting at the appropriate phase
+        gcloud deploy releases promote \
+          --release=release-${SHORT_SHA} \
+          --project=${_PROJECT_ID} \
+          --region=${_REGION} \
+          --delivery-pipeline=${_DELIVERY_PIPELINE} \
+          --rollout-id=rollout-to-${target}-${phase}-${SHORT_SHA} \
+          --to-target=${_SERVICE_NAME}-${target} \
+          --starting-phase-id=${phase} \
+          --annotations="commitId=${SHORT_SHA},target=${target},phase=${phase}"
+      fi
+

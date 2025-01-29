@@ -1,0 +1,42 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: efx-mw-fxbo
+  annotations:
+    run.googleapis.com/launch-stage: BETA
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+  labels:
+    cloud.googleapis.com/location: europe-west1
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "10"
+        autoscaling.knative.dev/minScale: "0"
+        run.googleapis.com/network-interfaces: '[{"network":"projects/prj-empirefx-stg-net/global/networks/svpc-empirefx-stg-net","subnetwork":"projects/prj-empirefx-stg-net/regions/europe-west1/subnetworks/sb-svpc-empirefx-stg-net-europe-west1-backend"}]'
+        run.googleapis.com/vpc-access-egress: private-ranges-only
+    spec:
+      containerConcurrency: 8
+      serviceAccountName: sa-eng-stg-cloudrun@prj-empirefx-eng-stg-be.iam.gserviceaccount.com
+      containers:
+      - name: efx-mw-fxbo
+        image: efx-mw-fxbo
+        ports:
+        - containerPort:  8081
+        env:
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        startupProbe:
+          timeoutSeconds: 240
+          periodSeconds: 240
+          failureThreshold: 1
+          tcpSocket:
+            port: 8081
+
+            
+
+
+
+
