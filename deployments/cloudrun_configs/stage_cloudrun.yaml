@@ -11,8 +11,8 @@ spec:
   template:
     metadata:
       annotations:
-        autoscaling.knative.dev/maxScale: "10"
-        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "5"
+        autoscaling.knative.dev/minScale: "1"
         run.googleapis.com/network-interfaces: '[{"network":"projects/prj-empirefx-stg-net/global/networks/svpc-empirefx-stg-net","subnetwork":"projects/prj-empirefx-stg-net/regions/europe-west1/subnetworks/sb-svpc-empirefx-stg-net-europe-west1-backend"}]'
         run.googleapis.com/vpc-access-egress: private-ranges-only
     spec:
