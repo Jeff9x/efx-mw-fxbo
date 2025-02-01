@@ -8,7 +8,7 @@ server:
   port: 8081
   address: 0.0.0.0
 #  ssl:
-#    key-store-type: PKCS12
+#    key-store-type: PKCS1
 #    key-store: ${SERVERSTORE_PATH:classpath:empirefx-mw-keystore.jks}
 #    key-store-password: ${SERVERSTORE_PASSWORD:empirefx-mw-keystore12}
 #    key-alias: empirefx-mw-keystore
