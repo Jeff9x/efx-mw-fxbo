@@ -40,15 +40,16 @@ public class RestConfiguration extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        System.out.println("Context path: " + contextPath);
 
         // Rest Configuration
         restConfiguration()
                 .component(camelComponent)
 //                .contextPath(apiPath)
-                .enableCORS(apiEnableCors)
+//                .enableCORS(apiEnableCors)
                 .corsHeaderProperty("Access-Control-Allow-Methods", "POST")
                 .port(env.getProperty("server.port", "8080"))
-//                .contextPath(contextPath.substring(0, contextPath.length() - 2))
+                .contextPath(contextPath.substring(0, contextPath.length() - 2))
 //                .apiContextPath(apiDocsPath)
                 .apiProperty("api.title", apiDocsTitle)
                 .apiProperty("api.version", apiDocsVersion)

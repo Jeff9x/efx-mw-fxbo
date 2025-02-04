@@ -7,6 +7,9 @@ springdoc:
 server:
   port: 8081
   address: 0.0.0.0
+#  servlet:
+#    context-path: ${API_PATH_VERSION:/mw-fxbo/api/v1}
+
 #  ssl:
 #    key-store-type: PKCS1
 #    key-store: ${SERVERSTORE_PATH:classpath:empirefx-mw-keystore.jks}
@@ -25,9 +28,10 @@ camel:
   rest:
     component: servlet
     port: ${server.port:8081}
+#    context-path: ${API_PATH_VERSION:/mw-fxbo/api/v1/*}
   servlet:
     mapping:
-      context-path: ${API_PATH_VERSION:/api/v1/*}
+      context-path: ${API_PATH_VERSION:/mw-fxbo/api/v1/*}
       enabled: true
       servlet-name: CamelServlet
   springboot:
