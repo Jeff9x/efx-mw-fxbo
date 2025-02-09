@@ -28,7 +28,7 @@ public class DownloadGcpImage {
             // Initialize the Cloud Storage client with explicit credentials
             Storage storage = StorageOptions.newBuilder()
                     .setCredentials(ServiceAccountCredentials.fromStream(
-                            new FileInputStream("/Users/emmanuelmuchiri/Documents/DocumentsZangu/key.json")
+                            new FileInputStream("key.json")
                     ))
                     .setProjectId(projectId)
                     .build()
