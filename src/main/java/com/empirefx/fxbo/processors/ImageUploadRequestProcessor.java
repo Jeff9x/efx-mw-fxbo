@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import static com.empirefx.fxbo.models.provider.DownloadGcpImage.downloadImageFromGoogleUrl;
 import static com.empirefx.fxbo.models.provider.S3ImageDownloader.downloadImage;
 import static org.apache.commons.io.IOUtils.toByteArray;
 
@@ -107,7 +108,9 @@ public class ImageUploadRequestProcessor implements Processor {
 
 //            byte[] imageBytes = toByteArray(urlResource.getInputStream());
 
-            byte[] imageBytes = downloadImage(filePath);
+//            byte[] imageBytes = downloadImage(filePath);
+
+            byte[] imageBytes = downloadImageFromGoogleUrl(filePath);
 
             File file = null;
             if (Objects.equals(type, "National ID") && Objects.equals(fileName, "FRONT_SIDE")) {
@@ -145,7 +148,9 @@ public class ImageUploadRequestProcessor implements Processor {
 
 //            byte[] imageBytesBack = toByteArray(urlResourceBack.getInputStream());
 
-            byte[] imageBytesBack = downloadImage(filePathBack);
+//            byte[] imageBytesBack = downloadImage(filePathBack);
+
+            byte[] imageBytesBack = downloadImageFromGoogleUrl(filePathBack);
 
             File fileback = null;
             if (Objects.equals(type, "National ID") && Objects.equals(fileNameBack, "BACK_SIDE")) {
