@@ -1,0 +1,15 @@
+apiVersion: skaffold/v4beta7
+kind: Config
+metadata:
+  name: efx-mw-fxbo
+deploy:
+  cloudrun: {}
+profiles:
+  - name: stage-env #should match with cloudeploy profiles
+    manifests:
+      rawYaml:
+        - ../cloudrun_configs/stage_cloudrun.yaml
+  - name: prod-env #should match with cloudeploy profiles
+    manifests:
+      rawYaml:
+        - ../cloudrun_configs/prod_cloudrun.yaml

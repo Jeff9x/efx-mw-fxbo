@@ -13,7 +13,7 @@ WORKDIR /usr/src/app
 
 # Copy the JAR file to the container
 COPY target/empirefx-fxbo-0.0.1-SNAPSHOT.jar /usr/src/app/empirefx-fxbo-0.0.1-SNAPSHOT.jar
-
+COPY key.json /usr/src/app/key.json
 # Set environment variables (optional)
 ENV JAVA_OPTS=""
 
