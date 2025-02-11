@@ -4,6 +4,20 @@ logsBucket: 'gs://${_LOGS_BUCKET}/logs'
 
 # Build and tag using commit sha
 steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'Downloading Cache'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      echo "Downloading Maven Cache..."
+      mkdir -p /workspace/.m2/repository
+      if gsutil ls gs://${_LOGS_BUCKET}/maven-cache/.m2/repository/ 2>/dev/null; then
+        gsutil -m rsync -r gs://${_LOGS_BUCKET}/maven-cache/.m2/repository/ /workspace/.m2/repository/
+      else
+        echo "No cache found in Cloud Storage. Proceeding with a fresh build..."
+      fi
+
 - name: 'maven:3.8.1-openjdk-17-slim'
   entrypoint: bash
   id: "Maven Build"
@@ -23,6 +37,20 @@ steps:
       echo '### Push Docker Image: ###' && \
       docker push '${_ARTIFACT_REGISTRY}/${_SERVICE_IMAGE_NAME}:${SHORT_SHA}'"
   ]
+  
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'Uploading Cache'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      echo "Uploading Maven Cache..."
+      if [ -d "/workspace/.m2/repository" ] && [ "$(ls -A /workspace/.m2/repository)" ]; then
+        gsutil -m rsync -r -x "org/empirefx/.*" /workspace/.m2/repository gs://${_LOGS_BUCKET}/maven-cache/.m2/repository/
+      else
+        echo "No Maven cache found. Skipping upload."
+      fi
+
 
 # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   # Step 2: Cloud Deploy Release Creation with Lock Mechanism
