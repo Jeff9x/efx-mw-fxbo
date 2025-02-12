@@ -82,7 +82,7 @@ public class AppTokenJava {
 
 
 public static String toStringPoa (String config,String user,String status,String type,String address, String postal_code, String country,
-                               String backFile ,String backName, String uploadedByClient)throws IOException {
+                               String backFile ,String backName, String uploadedByClient, String city)throws IOException {
     // Method to construct the payload
     // Create a StringBuilder to build the payload
     StringBuilder builder = new StringBuilder();
@@ -97,6 +97,7 @@ public static String toStringPoa (String config,String user,String status,String
     builder.append("        \"address\": \"").append(address).append("\",\n");
     builder.append("        \"postal_code\": \"").append(postal_code).append("\",\n");
     builder.append("        \"country\": \"").append(country).append("\",\n");
+    builder.append("        \"city\": \"").append(city).append("\",\n");
 
     // Append back_side array
     builder.append("        \"file\": [\n");

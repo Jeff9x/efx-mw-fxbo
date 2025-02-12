@@ -47,18 +47,8 @@ public class SendFXBOEmailRouteBuilder extends RouteBuilder {
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log(LoggingLevel.INFO, "Incoming response ${body}")
                 .convertBodyTo(String.class) // Convert InputStream to String
-//                .process(exchange -> {
-//                    String body = exchange.getIn().getBody(String.class);
-//                    Map jsonMap = new ObjectMapper().readValue(body, Map.class); // Parse JSON to Map
-//                    exchange.getIn().setBody(jsonMap); // Replace body with Map
-//                })
-//                .choice()
-//                    .when(simple("${body[code]} == 400"))
-//                        .log(LoggingLevel.WARN, "Processing failure response...")
-//                        .process("failureResponseProcessor")
-//                    .otherwise()
-                        .log(LoggingLevel.INFO, "Processing success response...")
-                        .process("emailSuccessResponseProcessor")
+                .log(LoggingLevel.INFO, "Processing success response...")
+                .process("emailSuccessResponseProcessor")
                 .end();
     }
 }

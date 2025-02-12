@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.empirefx.fxbo.models.provider.DownloadGcpImage.downloadImageFromGoogleUrl;
 import static com.empirefx.fxbo.models.provider.S3ImageDownloader.downloadImage;
 import static org.apache.commons.io.IOUtils.toByteArray;
 
@@ -31,7 +32,7 @@ public class ImagePoaUploadRequestProcessor implements Processor {
     }
     String encodeFront;
     String encodeBack;
-    @Value("${adaptive.POIConfig}")
+    @Value("${adaptive.POAConfig}")
 //    private Integer config;
     String config;
     String user;
@@ -40,6 +41,7 @@ public class ImagePoaUploadRequestProcessor implements Processor {
     String address;
     String postal_code;
     String country;
+    String city;
     String utilityFile;
     String utilityName;
     boolean uploadedByClient;
@@ -79,6 +81,8 @@ public class ImagePoaUploadRequestProcessor implements Processor {
         System.out.println("Incoming postal_code: " + postal_code);
         country = String.valueOf(dataObject.get("country"));
         System.out.println("Incoming country: " + country);
+        city = String.valueOf(dataObject.get("city"));
+        System.out.println("Incoming city: " + city);
         type = String.valueOf(dataObject.get("type"));
         System.out.println("Incoming type: " + type);
 
@@ -99,7 +103,7 @@ public class ImagePoaUploadRequestProcessor implements Processor {
 
 //            byte[] imageBytes = toByteArray(urlResource.getInputStream());
 
-            byte[] imageBytes = downloadImage(filePath);
+            byte[] imageBytes = downloadImageFromGoogleUrl(filePath);
 
             File file = null;
             if (Objects.equals(type, "Utility Bill")) {
@@ -127,7 +131,7 @@ public class ImagePoaUploadRequestProcessor implements Processor {
 //        System.out.println("Processed Request: " + requestBody);
 
         String finalPayload = AppTokenJava.toStringPoa(config,user,status,type, address,
-                postal_code,  country, utilityFile , utilityName, String.valueOf(uploadedByClient));
+                postal_code,  country, city, utilityFile , utilityName, String.valueOf(uploadedByClient));
 
         System.out.println("finalpayload"+finalPayload);
 

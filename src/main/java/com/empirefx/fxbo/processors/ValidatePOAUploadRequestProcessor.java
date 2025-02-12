@@ -75,6 +75,9 @@ public class ValidatePOAUploadRequestProcessor implements Processor {
         String country = (String) data.get("country");
         validateCountry(country);
 
+        String city = (String) data.get("city");
+
+
         List<Map<String, Object>> fileList = (List<Map<String, Object>>) data.get("file");
         validateFileList(fileList);
     }
