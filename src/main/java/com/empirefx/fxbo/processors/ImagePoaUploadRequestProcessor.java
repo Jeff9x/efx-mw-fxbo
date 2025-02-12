@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.empirefx.fxbo.models.provider.DownloadGcpImage.downloadImageFromGoogleUrl;
-import static com.empirefx.fxbo.models.provider.S3ImageDownloader.downloadImage;
-import static org.apache.commons.io.IOUtils.toByteArray;
+
 
 @Component
 public class ImagePoaUploadRequestProcessor implements Processor {

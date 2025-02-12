@@ -1,14 +1,11 @@
 package com.empirefx.fxbo.processors;
 import com.empirefx.fxbo.models.provider.AppTokenJava;
-import com.empirefx.fxbo.models.provider.Data;
-import com.empirefx.fxbo.models.provider.DocumentResponse;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +18,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static com.empirefx.fxbo.models.provider.DownloadGcpImage.downloadImageFromGoogleUrl;
-import static com.empirefx.fxbo.models.provider.S3ImageDownloader.downloadImage;
-import static org.apache.commons.io.IOUtils.toByteArray;
+
 
 @Component
 public class ImageUploadRequestProcessor implements Processor {
@@ -36,7 +32,6 @@ public class ImageUploadRequestProcessor implements Processor {
     String encodeBack;
     @Value("${adaptive.POIConfig}")
     private Integer config;
-//    Integer config;
     String user;
     String status;
     String expiresAt;
@@ -48,7 +43,6 @@ public class ImageUploadRequestProcessor implements Processor {
     String backFile;
     String backName;
     boolean uploadedByClient;
-//    Data datas;
 
     @Autowired
     private ResourceLoader resourceLoader;
@@ -68,8 +62,6 @@ public class ImageUploadRequestProcessor implements Processor {
         // Parse the JSON payload
         JSONObject jsonObject = new JSONObject(requestBody);
         System.out.println("Incoming JSON: " + jsonObject);
-//        config = String.valueOf(Integer.parseInt(String.valueOf(Integer.valueOf(requestBody.get("config").toString()))));
-//        config = 4;
         user = String.valueOf(Integer.parseInt(String.valueOf(Integer.valueOf(requestBody.get("user").toString()))));
         System.out.println("Incoming User: " + user);
         uploadedByClient = Boolean.parseBoolean(requestBody.get("uploadedByClient").toString());
@@ -102,13 +94,6 @@ public class ImageUploadRequestProcessor implements Processor {
             String filePath = fileObject.getString("file");
             String fileName = fileObject.getString("name");
 
-//            Resource urlResource = resourceLoader.getResource(filePath);
-//
-//            System.out.println("Front urlImage: " + urlResource);
-
-//            byte[] imageBytes = toByteArray(urlResource.getInputStream());
-
-//            byte[] imageBytes = downloadImage(filePath);
 
             byte[] imageBytes = downloadImageFromGoogleUrl(filePath);
 

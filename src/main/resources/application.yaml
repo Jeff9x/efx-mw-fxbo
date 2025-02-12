@@ -21,7 +21,6 @@ camel:
   rest:
     component: servlet
     port: ${server.port:8081}
-#    context-path: ${API_PATH_VERSION:/mw-fxbo/api/v1/*}
   servlet:
     mapping:
       context-path: ${API_PATH_VERSION:/mw-fxbo/api/v1/*}
@@ -62,31 +61,13 @@ management:
     enabled: false
   server:
     port: 8081
-#    address: 0.0.0.0
 
-  rabbitmq:
-    host: 172.17.0.2
-    port: 5672
-    username: guest
-    password: guest
-    virtual-host: /
-    getCountriesQueue: spring-rabbitmq:empirefx?queues=GetFXBO_Countries&routingKey=GetFXBO_Countries
 efx-values:
   vasco:
     cred: efx-dev-cred
-#  header-values:
-#    channelCode[0]: 101
-#    channelCode[1]: 102
-#    serviceCode: 1014
-#    serviceName: GETFXBOCountries
-#    channelName: efx
-#    routeCode: 103
-#    routeName: empirefx
-#    serviceMode: sync
-#    minorServiceVersion: 1.0
+
 
 adaptive:
-#  host: ${ATOMIC_HOST:demo.fxbackoffice.com}
   method: GET
   camelHttpMethod: CamelHttpMethod
   authorization: Authorization
@@ -95,14 +76,11 @@ adaptive:
   POAConfig: 5
   emailConfig : 1
   resetPasswordConfig: main
-#  path: ${ATOMIC_PATH:/rest/dict/countries}
-#  timeout: ${ATOMIC_TIMEOUT:3000}
-#  protocol: ${ATOMIC_PROTOCOL:https}
-#  uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
-#  uri: ${atomic.protocol}://${atomic.host}${atomic.path}${atomic.uri-params}
+
+gcp:
+  projectId: prj-empirefx-eng-stg-be
 
 atomic:
-  #  host: ${ATOMIC_HOST:demo.fxbackoffice.com}
   host: ${ATOMIC_HOST:portal.empirefx.com}
   hostMock: ${ATOMIC_HOST:portal.empirefx.com}
   method: GET
@@ -171,25 +149,6 @@ atomic1:
   uriInternalFundsTransfer: ${atomic1.protocol}://${atomic1.host}${atomic1.pathInternalFundsTransfer}${atomic1.uri-internalFundsTransfer}
   uriChangeLeverage: ${atomic1.protocol}://${atomic1.host}${atomic1.pathChangeLeverage}
 
-ehf:
-  host: ${EHF_HOST:localhost}
-  method: POST
-  path: /api/ehf/fetchKeys
-  port: ${EHF_PORT:8081}
-  protocol: ${EHF_PROTOCOL:http}
-  uri: ${ehf.protocol}://${ehf.host}:${ehf.port}${ehf.path}${ehf.uri-params}
-  uri-params: ?bridgeEndpoint=true&httpMethod=${ehf.method}&throwExceptionOnFailure=true
-
-
-vault-connector:
-  host: ${VAULT_HOST:localhost}
-  method: GET
-  path: /api/credentials/
-  port: ${VAULT_PORT:8083}
-  protocol: ${VAULT_PROTOCOL:http}
-  uri: ${vault-connector.protocol}://${vault-connector.host}:${vault-connector.port}${vault-connector.path}
-  uri-params: ?bridgeEndpoint=true&httpMethod=${vault-connector.method}&throwExceptionOnFailure=false
-#  use-management-port: true
 
 
 

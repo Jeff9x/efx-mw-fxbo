@@ -1,7 +1,6 @@
 package com.empirefx.fxbo.models.provider;
 
-import com.empirefx.fxbo.processors.ImageUploadRequestProcessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 
@@ -9,13 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.List;
 
-
-//import java.io.File;
-//import java.io.FileInputStream;
-//import java.io.IOException;
-//import java.util.Base64;
 
 @Component
 public class AppTokenJava {
