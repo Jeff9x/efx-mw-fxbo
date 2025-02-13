@@ -36,7 +36,6 @@ public class ChangeLeverageRouteBuilder extends RouteBuilder {
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
-                // .process("validateChangeLeverageRequestProcessor") // Validate the input request (optional)
                 .process("changeLeverageHeadersSetterProcessor") // Add necessary headers
                 .removeHeaders("CamelHttp*")
                 .doTry()

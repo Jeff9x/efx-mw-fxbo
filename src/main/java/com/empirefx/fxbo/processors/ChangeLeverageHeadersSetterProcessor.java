@@ -23,8 +23,7 @@ public class ChangeLeverageHeadersSetterProcessor implements Processor {
     private String uriChangeLeverage;
     @Value("${atomic1.uri-paramsResetPassword}")
     private String uriParamsChangeLeverage;
-//    @Value("${adaptive.changeLeverageConfig}")
-//    private String config;
+
 
     private final ObjectMapper objectMapper = new ObjectMapper(); // For JSON serialization
 
