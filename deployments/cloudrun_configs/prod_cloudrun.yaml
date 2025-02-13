@@ -13,13 +13,13 @@ spec:
       annotations:
         autoscaling.knative.dev/maxScale: "5"
         autoscaling.knative.dev/minScale: "1"
-        run.googleapis.com/network-interfaces: '[{"network":"projects/prj-empirefx-stg-net/global/networks/svpc-empirefx-stg-net","subnetwork":"projects/prj-empirefx-stg-net/regions/europe-west1/subnetworks/sb-svpc-empirefx-stg-net-europe-west1-backend"}]'
+        run.googleapis.com/network-interfaces: '[{"network":"projects/prj-empirefx-prd-net/global/networks/svpc-empirefx-prd-net","subnetwork":"projects/prj-empirefx-prd-net/regions/europe-west1/subnetworks/sb-svpc-empirefx-prd-net-europe-west1-empirefx"}]'
         run.googleapis.com/vpc-access-egress: private-ranges-only
-        run.googleapis.com/cloudsql-instances: prj-empirefx-eng-stg-be:europe-west1:empire-stg
+        run.googleapis.com/cloudsql-instances: prj-empirefx-eng-prd:europe-west1:empire-prod
         run.googleapis.com/startup-cpu-boost: 'true'
     spec:
       containerConcurrency: 8
-      serviceAccountName: sa-eng-stg-cloudrun@prj-empirefx-eng-stg-be.iam.gserviceaccount.com
+      serviceAccountName: sa-eng-prd-cloudrun@prj-empirefx-eng-prd.iam.gserviceaccount.com
       containers:
       - name: efx-mw-fxbo
         image: efx-mw-fxbo
