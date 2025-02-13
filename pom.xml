@@ -521,7 +521,7 @@
 			<plugin>
 				<groupId>org.commonjava.maven.plugins</groupId>
 				<artifactId>project-sources-maven-plugin</artifactId>
-				<version>1.0</version>
+				<version>${project-sources-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>project-sources-archive</id>
