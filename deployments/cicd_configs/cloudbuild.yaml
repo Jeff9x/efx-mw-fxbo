@@ -117,7 +117,7 @@ steps:
           target="dev"
           phase="stable"
           ;;
-        master)
+        prod)
           target="prod"
           phase="stable"
           ;;
