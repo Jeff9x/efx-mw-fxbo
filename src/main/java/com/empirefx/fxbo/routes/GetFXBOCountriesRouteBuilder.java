@@ -7,7 +7,6 @@ import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 
 import static com.empirefx.fxbo.commonlib.enums.HTTPCommonHeadersEnum.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;

@@ -4,12 +4,21 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 import java.net.URL;
 
+@Component
 public class DownloadGcpImage {
-    private static final String projectId = "prj-empirefx-eng-stg-be";
+
+    private static String projectId;
+
+    @Value("${gcp.projectId")
+    public void setProjectId(String project){
+        projectId = project;
+    }
 
     public static byte[] downloadImageFromGoogleUrl(String urlString) {
         try {

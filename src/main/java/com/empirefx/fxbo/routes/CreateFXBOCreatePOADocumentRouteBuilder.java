@@ -3,7 +3,6 @@ package com.empirefx.fxbo.routes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
-import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
@@ -39,11 +38,10 @@ public class CreateFXBOCreatePOADocumentRouteBuilder extends RouteBuilder {
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
-                .process("validatePOAUploadRequestProcessor")
+//                .process("validatePOAUploadRequestProcessor")
                 .process("headersSetterProcessor")
                 .process("imagePoaUploadRequestProcessor")
                 .doTry()
-//                .log("Processed request To Backend : ${body}")
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Upload POA Request :: {{atomic1.uriPOI}}")
                 .enrich().simple("{{atomic1.uriPOI}}").id("callServiceBack20")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
