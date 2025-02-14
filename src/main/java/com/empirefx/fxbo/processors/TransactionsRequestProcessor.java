@@ -27,6 +27,10 @@ public class TransactionsRequestProcessor implements Processor {
 
         System.out.println("Incoming Request: " + requestBody);
 
+        Integer fromUserId = (Integer) requestBody.get("fromUserId");
+        Integer limit = (Integer) requestBody.get("limit");
+        Integer offset = (Integer) requestBody.get("offset");
+
         // Create new transformed request structure
         Map<String, Object> transformedRequest = new HashMap<>();
 
@@ -38,9 +42,10 @@ public class TransactionsRequestProcessor implements Processor {
 
         // Create segment block with limit and offset
         Map<String, Object> segment = new HashMap<>();
-        segment.put("limit", requestBody.getOrDefault("limit", 10));
-        segment.put("offset", requestBody.getOrDefault("offset", 0));
+        segment.put("limit", limit);
+        segment.put("offset", offset);
         transformedRequest.put("segment", segment);
+        transformedRequest.put("fromUserId", fromUserId);
 
         // Convert Map to JSON string
         String jsonTransformedRequest = objectMapper.writeValueAsString(transformedRequest);

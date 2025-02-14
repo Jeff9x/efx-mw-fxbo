@@ -31,7 +31,6 @@ public class GetFXBOTransactionsRouteBuilder extends RouteBuilder {
                 .setHeader("Accept", constant("application/json"))
                 .process("headersSetterProcessor")
                 .process("transactionsRequestProcessor")
-                .marshal().json()
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Fetch Transactions Endpoint :: Request :: {{atomic1.uriFetchTransactions}}")
                 .enrich().simple("{{atomic1.uriFetchTransactions}}").id("callServiceBack311")
