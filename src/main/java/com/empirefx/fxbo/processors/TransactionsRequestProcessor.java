@@ -27,7 +27,7 @@ public class TransactionsRequestProcessor implements Processor {
 
         System.out.println("Incoming Request: " + requestBody);
 
-        Integer fromUserId = (Integer) requestBody.get("fromUserId");
+        String fromUserId = (String) requestBody.get("fromUserId");
         Integer limit = (Integer) requestBody.get("limit");
         Integer offset = (Integer) requestBody.get("offset");
 
@@ -45,7 +45,7 @@ public class TransactionsRequestProcessor implements Processor {
         segment.put("limit", limit);
         segment.put("offset", offset);
         transformedRequest.put("segment", segment);
-        transformedRequest.put("fromUserId", fromUserId);
+        transformedRequest.put("fromUserId", Integer.parseInt(fromUserId));
 
         // Convert Map to JSON string
         String jsonTransformedRequest = objectMapper.writeValueAsString(transformedRequest);
