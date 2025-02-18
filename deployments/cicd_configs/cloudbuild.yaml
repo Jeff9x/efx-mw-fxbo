@@ -12,8 +12,8 @@ steps:
     - |
       echo "Downloading Maven Cache..."
       mkdir -p /workspace/.m2/repository
-      if gsutil ls gs://${_LOGS_BUCKET}/maven-cache/.m2/repository/ 2>/dev/null; then
-        gsutil -m rsync -r gs://${_LOGS_BUCKET}/maven-cache/.m2/repository/ /workspace/.m2/repository/
+      if gsutil ls gs://${_LOGS_BUCKET}/maven-cache/efx-mw-fxbo/.m2/repository/ 2>/dev/null; then
+        gsutil -m rsync -r gs://${_LOGS_BUCKET}/maven-cache/efx-mw-fxbo/.m2/repository/ /workspace/.m2/repository/
       else
         echo "No cache found in Cloud Storage. Proceeding with a fresh build..."
       fi
@@ -46,7 +46,7 @@ steps:
     - |
       echo "Uploading Maven Cache..."
       if [ -d "/workspace/.m2/repository" ] && [ "$(ls -A /workspace/.m2/repository)" ]; then
-        gsutil -m rsync -r -x "org/empirefx/.*" /workspace/.m2/repository gs://${_LOGS_BUCKET}/maven-cache/.m2/repository/
+        gsutil -m rsync -r -x "org/empirefx/.*" /workspace/.m2/repository gs://${_LOGS_BUCKET}/maven-cache/efx-mw-fxbo/.m2/repository/
       else
         echo "No Maven cache found. Skipping upload."
       fi
