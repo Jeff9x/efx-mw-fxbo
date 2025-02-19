@@ -80,6 +80,13 @@ adaptive:
 gcp:
   projectId: prj-empirefx-eng-stg-be
 
+aws-config:
+  accessKey: DO00EEN2Q3RHNXRJ4FBZ
+  secretKey: ybgFqOf09Fhz0+OagPSKS/nZIAHgMMp8fJXb+uQgvAU
+  region: lon1
+  service: s3
+  signingAlgorithm: AWS4-HMAC-SHA256
+
 atomic:
   host: ${ATOMIC_HOST:portal.empirefx.com}
   hostMock: ${ATOMIC_HOST:portal.empirefx.com}

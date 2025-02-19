@@ -1,4 +1,7 @@
 package com.empirefx.fxbo.models.provider;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayOutputStream;
@@ -15,13 +18,41 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+
+@Component
 public class S3ImageDownloader {
 
-    private static final String ACCESS_KEY = "DO00EEN2Q3RHNXRJ4FBZ";
-    private static final String SECRET_KEY = "ybgFqOf09Fhz0+OagPSKS/nZIAHgMMp8fJXb+uQgvAU";
-    private static final String REGION = "lon1";
-    private static final String SERVICE = "s3";
-    private static final String SIGNING_ALGORITHM = "AWS4-HMAC-SHA256";
+    private static String ACCESS_KEY;
+    private static String SECRET_KEY;
+    private static String REGION;
+    private static String SERVICE;
+    private static String SIGNING_ALGORITHM;
+
+    @Value("${aws-config.accessKey}")
+    public void setAccessKey(String accessKey){
+        ACCESS_KEY = accessKey;
+    }
+
+    @Value("${aws-config.secretKey}")
+    public void setSecretKey(String secretKey){
+        SECRET_KEY = secretKey;
+    }
+
+    @Value("${aws-config.region}")
+    public void setRegion(String region){
+        REGION = region;
+    }
+
+    @Value("${aws-config.service}")
+    public void setService(String service){
+        SERVICE = service;
+    }
+
+    @Value("${aws-config.signingAlgorithm}")
+    public void setSigningAlgorithm(String signingAlgorithm){
+        SIGNING_ALGORITHM = signingAlgorithm;
+    }
+
 
     public static byte[] downloadImage(String imageUrl) throws Exception {
         // Create the URL connection
