@@ -11,7 +11,7 @@ import java.util.Map;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Component
-public class CreateFXBODepositRouteBuilder extends RouteBuilder {
+public class VerifyPhoneNumberRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -28,41 +28,31 @@ public class CreateFXBODepositRouteBuilder extends RouteBuilder {
                 });
 
         rest()
-                .post("/transactions/deposits")
-                .description("Adapter REST Service FXBO Deposits")
+                .post("/verification/phone")
+                .description("Phone Number Verification Service")
                 .consumes(APPLICATION_JSON_VALUE)
                 .produces("application/json")
-                .to("direct:makeDeposits");
+                .to("direct:verifyPhoneNumber");
 
-        from("direct:makeDeposits").routeId("com.empirefx.request.dispatchRequest101")
+        from("direct:verifyPhoneNumber").routeId("com.empirefx.request.verifyPhoneNumber")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
-//                .process("validateDepositRequestProcessor")
+//                .process("validatePhoneNumberProcessor")
                 .process("headersSetterProcessor")
-//                .process("clientDepositRequestProcessor")
+                .process("clientPhoneNumberVerificationProcessor")
                 .doTry()
-                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Deposit Request :: {{atomic1.uriDeposit}}")
-                .enrich().simple("{{atomic1.uriDeposit}}").id("callServiceBack101")
+                .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Verify Phone Number :: {{atomic.uriVerifyPhone}}")
+                .enrich().simple("{{atomic.uriVerifyPhone}}").id("verifyPhoneNumber")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .to("direct:fetchDepositResponse");
+                .to("direct:fetchVerificationResponse");
 
-        from("direct:fetchDepositResponse")
+        from("direct:fetchVerificationResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
-                .convertBodyTo(String.class) // Convert InputStream to String
-                .process(exchange -> {
-                    String body = exchange.getIn().getBody(String.class);
-                    Map jsonMap = new ObjectMapper().readValue(body, Map.class); // Parse JSON to Map
-                    exchange.getIn().setBody(jsonMap); // Replace body with Map
-                })
-                .choice()
-                    .when(simple("${body[code]} == 400"))
-                        .log(LoggingLevel.WARN, "Processing failure response...")
-                        .process("failureResponseProcessor")
-                    .otherwise()
-                        .log(LoggingLevel.INFO, "Processing success response...")
-                        .process("successResponseProcessor")
+                .setBody(simple("${body}"))
+                .convertBodyTo(String.class)
+                .unmarshal().json()
                 .end();
     }
 }

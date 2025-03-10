@@ -24,7 +24,7 @@ steps:
   args: [
     "-c",
       "echo '### Maven Build: ###' && \
-      mvn clean install -DskipTests -Dmaven.repo.local=/workspace/.m2/repository"
+      mvn clean install -DskipTests -s /workspace/settings.xml -Dmaven.repo.local=/workspace/.m2/repository"
   ]
 
 - name: 'gcr.io/cloud-builders/docker'

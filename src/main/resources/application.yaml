@@ -75,10 +75,18 @@ adaptive:
   POIConfig: 4
   POAConfig: 5
   emailConfig : 1
+  phoneVerificationConfig: 14
   resetPasswordConfig: main
 
 gcp:
   projectId: prj-empirefx-eng-stg-be
+
+aws-config:
+  accessKey: DO00EEN2Q3RHNXRJ4FBZ
+  secretKey: ybgFqOf09Fhz0+OagPSKS/nZIAHgMMp8fJXb+uQgvAU
+  region: lon1
+  service: s3
+  signingAlgorithm: AWS4-HMAC-SHA256
 
 atomic:
   host: ${ATOMIC_HOST:portal.empirefx.com}
@@ -92,10 +100,12 @@ atomic:
   pathUserAccount: ${ATOMIC_PATH:/rest/users}
   pathDocuments: ${ATOMIC_PATH:/rest/documents/update}
   pathFxRates: ${ATOMIC_PATH:/rest/rates/get-live}
+  pathPhoneNumberDocument: ${ATOMIC_PATH:/rest/documents}
   timeout: ${ATOMIC_TIMEOUT:10000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
   uri-paramsAccount: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method2}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
+  uri-paramsPhoneVerification: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method2}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
   uri: ${atomic.protocol}://${atomic.host}${atomic.path}${atomic.uri-params}
   uriAccountTypes: ${atomic.protocol}://${atomic.host}${atomic.pathAccountTypes}${atomic.uri-params}
   uriAccount: ${atomic.protocol}://${atomic.host}${atomic.pathAccount}${atomic.uri-paramsAccount}
@@ -106,6 +116,7 @@ atomic:
   uriUpdateDocuments: ${atomic.protocol}://${atomic.host}${atomic.pathDocuments}${atomic.uri-paramsAccount}
   uriPlatformServers: ${atomic.protocol}://${atomic.host}${atomic.pathPlatformServers}${atomic.uri-params}
   uriPlatformServer: ${atomic.protocol}://${atomic.host}${atomic.pathPlatformServers}
+  uriVerifyPhone: ${atomic.protocol}://${atomic.host}${atomic.pathPhoneNumberDocument}${atomic.uri-paramsPhoneVerification}
 
 atomic1:
   host: ${ATOMIC_HOST:portal.empirefx.com}
