@@ -43,7 +43,7 @@ public class CreateFXBODepositRouteBuilder extends RouteBuilder {
                 .process("clientDepositRequestProcessor")
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Deposit Request :: {{atomic1.uriDeposit}}")
-                .enrich().simple("{{atomic1.uriDeposit}}").id("callServiceBack101")
+//                .enrich().simple("{{atomic1.uriDeposit}}").id("callServiceBack101")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .to("direct:fetchDepositResponse");
 

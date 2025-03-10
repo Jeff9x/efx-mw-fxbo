@@ -25,8 +25,13 @@ public class ClientDepositRequestProcessor implements Processor {
 
         System.out.println("Incoming Request: " + requestBody);
 
-        // Set default values if not present in the payload
-        requestBody.put("status", "pending");   // Default value for 'enabled'
+        String mt4Comment = (String) requestBody.get("narration");
+
+        System.out.printf("Incoming Narration: %s\n", mt4Comment);
+
+        requestBody.put("status", "approved");
+        requestBody.put("mt4Comment", "SAFARICOM M-PESA#"+mt4Comment);
+        requestBody.remove("narration");
 
         // Optionally: log the updated request
         System.out.println("Processed Request: " + requestBody);
