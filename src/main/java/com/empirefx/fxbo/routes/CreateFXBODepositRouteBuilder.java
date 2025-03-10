@@ -40,8 +40,12 @@ public class CreateFXBODepositRouteBuilder extends RouteBuilder {
                 .setHeader("Accept", constant("application/json"))
 //                .process("validateDepositRequestProcessor")
                 .process("headersSetterProcessor")
-//                .process("clientDepositRequestProcessor")
+                .process(exchange -> {
+                    String jsonBody = new ObjectMapper().writeValueAsString(exchange.getIn().getBody(Map.class));
+                    exchange.getIn().setBody(jsonBody);
+                })
                 .doTry()
+                .log(LoggingLevel.ERROR, "${body}")
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Deposit Request :: {{atomic1.uriDeposit}}")
                 .enrich().simple("{{atomic1.uriDeposit}}").id("callServiceBack101")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
