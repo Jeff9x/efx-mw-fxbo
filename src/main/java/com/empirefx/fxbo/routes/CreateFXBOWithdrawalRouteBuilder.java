@@ -38,9 +38,13 @@ public class CreateFXBOWithdrawalRouteBuilder extends RouteBuilder {
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader("Content-Type", constant("application/json"))
                 .setHeader("Accept", constant("application/json"))
-                .process("validateDepositRequestProcessor")
+//                .process("validateDepositRequestProcessor")
                 .process("headersSetterProcessor")
-                .process("clientRequestWithdrawalProcessor")
+//                .process("clientRequestWithdrawalProcessor")
+                .process(exchange -> {
+                    String jsonBody = new ObjectMapper().writeValueAsString(exchange.getIn().getBody(Map.class));
+                    exchange.getIn().setBody(jsonBody);
+                })
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Withdrawal Request :: {{atomic1.uriWithdrawal}}")
                 .enrich().simple("{{atomic1.uriWithdrawal}}").id("callServiceBack102")
