@@ -101,6 +101,7 @@ atomic:
   pathDocuments: ${ATOMIC_PATH:/rest/documents/update}
   pathFxRates: ${ATOMIC_PATH:/rest/rates/get-live}
   pathPhoneNumberDocument: ${ATOMIC_PATH:/rest/documents}
+  pathIbApplication: ${ATOMIC_PATH:/rest/applications/config}
   timeout: ${ATOMIC_TIMEOUT:10000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
@@ -117,6 +118,7 @@ atomic:
   uriPlatformServers: ${atomic.protocol}://${atomic.host}${atomic.pathPlatformServers}${atomic.uri-params}
   uriPlatformServer: ${atomic.protocol}://${atomic.host}${atomic.pathPlatformServers}
   uriVerifyPhone: ${atomic.protocol}://${atomic.host}${atomic.pathPhoneNumberDocument}${atomic.uri-paramsPhoneVerification}
+  uriIbApplication: ${atomic.protocol}://${atomic.host}${atomic.pathIbApplication}
 
 atomic1:
   host: ${ATOMIC_HOST:portal.empirefx.com}
