@@ -139,6 +139,7 @@ atomic1:
   pathResetPassword: ${ATOMIC_PATH:/rest/accounts/reset-password/}
   pathInternalFundsTransfer: ${ATOMIC_PATH:/rest/transfer}
   pathChangeLeverage: ${ATOMIC_PATH:/rest/accounts/}
+  pathSubmitIbApplication: ${ATOMIC_PATH:/rest/applications/new}
   timeout: ${ATOMIC_TIMEOUT:10000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
@@ -161,6 +162,7 @@ atomic1:
   uriResetPassword: ${atomic1.protocol}://${atomic1.host}${atomic1.pathResetPassword}
   uriInternalFundsTransfer: ${atomic1.protocol}://${atomic1.host}${atomic1.pathInternalFundsTransfer}${atomic1.uri-internalFundsTransfer}
   uriChangeLeverage: ${atomic1.protocol}://${atomic1.host}${atomic1.pathChangeLeverage}
+  uriSubmitIbApplication: ${atomic1.protocol}://${atomic1.host}${atomic1.pathSubmitIbApplication}${atomic1.uri-params}
 
 
 
