@@ -47,19 +47,14 @@ public class GetFXBOIBApplicationRouteBuilder extends RouteBuilder {
         from("direct:fetchIbApplicationResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
-                .doTry()
-                    .unmarshal().json()
-                    .process("emptyAccountBalanceResponseProcessor")
+                .unmarshal().json()
                 .choice()
-                    .when(simple("${body[]} == null")) // Adjust condition based on actual error field
-                    .log("Request failed: ${body[]}")
+                .when(simple("${body[code]} == 400"))
+                .log(LoggingLevel.WARN, "Processing failure response...")
+                .process("failureResponseProcessor")
                 .otherwise()
-                    .log("Request was successful.")
-                .endChoice()
-                .endDoTry()
+                .log(LoggingLevel.INFO, "Processing success response...")
                 .process("successResponseProcessor")
-                .doCatch(Exception.class)
-                .log("Exception during processing: ${exception.message}")
                 .end();
     }
 }
