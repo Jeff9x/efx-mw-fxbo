@@ -39,8 +39,8 @@ public class GetIbApplicationRequestProcessor implements Processor {
 
         System.out.println("Incoming Caller IP :"+ipRemote);
 
-        String IbId = exchange.getIn().getHeader("accountId", String.class);
-        System.out.println("accountId :"+IbId);
+        String IbId = exchange.getIn().getHeader("configId", String.class);
+        System.out.println("configId :"+IbId);
 
 
         String finaUrl = uriIbApplication+"/"+IbId+uriParams;
