@@ -150,6 +150,7 @@ atomic1:
   uri-paramsResetPassword: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPut}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-internalFundsTransfer: /new?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-CreateIBReferalLink: /new?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
+  uri-GetIBReferalLink: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri: ${atomic1.protocol}://${atomic1.host}${atomic1.path}${atomic1.uri-params}
   uriPOI: ${atomic1.protocol}://${atomic1.host}${atomic1.pathPOI}${atomic1.uri-paramsUser}
   uriUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUser}${atomic1.uri-params}
@@ -166,6 +167,8 @@ atomic1:
   uriChangeLeverage: ${atomic1.protocol}://${atomic1.host}${atomic1.pathChangeLeverage}
   uriSubmitIbApplication: ${atomic1.protocol}://${atomic1.host}${atomic1.pathSubmitIbApplication}${atomic1.uri-params}
   uriCreateIbReferralLink: ${atomic1.protocol}://${atomic1.host}${atomic1.pathCreateIBReferalLink}${atomic1.uri-CreateIBReferalLink}
+  uriGetIbReferralLinks: ${atomic1.protocol}://${atomic1.host}${atomic1.pathCreateIBReferalLink}${atomic1.uri-GetIBReferalLink}
+
 
 
 
