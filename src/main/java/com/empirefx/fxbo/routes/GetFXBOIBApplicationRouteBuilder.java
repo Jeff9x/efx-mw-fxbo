@@ -27,7 +27,7 @@ public class GetFXBOIBApplicationRouteBuilder extends RouteBuilder {
                 });
 
         rest()
-                .get("/ib-application/{accountId}")
+                .get("/ib-application/{configId}")
                 .description("Adapter REST Service")
                 .produces("application/json")
                 .to("direct:fetchIbApplication");
