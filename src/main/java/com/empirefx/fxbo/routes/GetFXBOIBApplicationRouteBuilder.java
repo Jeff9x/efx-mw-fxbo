@@ -46,7 +46,7 @@ public class GetFXBOIBApplicationRouteBuilder extends RouteBuilder {
 
         from("direct:fetchIbApplicationResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .log("Incoming response: ${body}")
+                .log("Incoming  response: ${body}")
                 .unmarshal().json()
                 .choice()
                 .when(simple("${body[code]} == 400"))
