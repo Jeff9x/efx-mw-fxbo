@@ -101,6 +101,7 @@ atomic:
   pathDocuments: ${ATOMIC_PATH:/rest/documents/update}
   pathFxRates: ${ATOMIC_PATH:/rest/rates/get-live}
   pathPhoneNumberDocument: ${ATOMIC_PATH:/rest/documents}
+  pathIbApplication: ${ATOMIC_PATH:/rest/applications/config}
   timeout: ${ATOMIC_TIMEOUT:10000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic.method}&throwExceptionOnFailure=false&responseTimeout=${atomic.timeout}
@@ -117,6 +118,7 @@ atomic:
   uriPlatformServers: ${atomic.protocol}://${atomic.host}${atomic.pathPlatformServers}${atomic.uri-params}
   uriPlatformServer: ${atomic.protocol}://${atomic.host}${atomic.pathPlatformServers}
   uriVerifyPhone: ${atomic.protocol}://${atomic.host}${atomic.pathPhoneNumberDocument}${atomic.uri-paramsPhoneVerification}
+  uriIbApplication: ${atomic.protocol}://${atomic.host}${atomic.pathIbApplication}
 
 atomic1:
   host: ${ATOMIC_HOST:portal.empirefx.com}
@@ -137,6 +139,8 @@ atomic1:
   pathResetPassword: ${ATOMIC_PATH:/rest/accounts/reset-password/}
   pathInternalFundsTransfer: ${ATOMIC_PATH:/rest/transfer}
   pathChangeLeverage: ${ATOMIC_PATH:/rest/accounts/}
+  pathSubmitIbApplication: ${ATOMIC_PATH:/rest/applications/new}
+  pathCreateIBReferalLink: ${ATOMIC_PATH:/rest/ib/links}
   timeout: ${ATOMIC_TIMEOUT:10000}
   protocol: ${ATOMIC_PROTOCOL:https}
   uri-params: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
@@ -145,6 +149,8 @@ atomic1:
   uri-paramsDeclineTransaction: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPatch}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-paramsResetPassword: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.methodPut}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri-internalFundsTransfer: /new?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
+  uri-CreateIBReferalLink: /new?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
+  uri-GetIBReferalLink: ?version=1.0.0&_locale=en&?bridgeEndpoint=true&httpMethod=${atomic1.method}&throwExceptionOnFailure=false&responseTimeout=${atomic1.timeout}
   uri: ${atomic1.protocol}://${atomic1.host}${atomic1.path}${atomic1.uri-params}
   uriPOI: ${atomic1.protocol}://${atomic1.host}${atomic1.pathPOI}${atomic1.uri-paramsUser}
   uriUser: ${atomic1.protocol}://${atomic1.host}${atomic1.pathUser}${atomic1.uri-params}
@@ -159,6 +165,10 @@ atomic1:
   uriResetPassword: ${atomic1.protocol}://${atomic1.host}${atomic1.pathResetPassword}
   uriInternalFundsTransfer: ${atomic1.protocol}://${atomic1.host}${atomic1.pathInternalFundsTransfer}${atomic1.uri-internalFundsTransfer}
   uriChangeLeverage: ${atomic1.protocol}://${atomic1.host}${atomic1.pathChangeLeverage}
+  uriSubmitIbApplication: ${atomic1.protocol}://${atomic1.host}${atomic1.pathSubmitIbApplication}${atomic1.uri-params}
+  uriCreateIbReferralLink: ${atomic1.protocol}://${atomic1.host}${atomic1.pathCreateIBReferalLink}${atomic1.uri-CreateIBReferalLink}
+  uriGetIbReferralLinks: ${atomic1.protocol}://${atomic1.host}${atomic1.pathCreateIBReferalLink}${atomic1.uri-GetIBReferalLink}
+
 
 
 
