@@ -2,17 +2,13 @@ package com.empirefx.fxbo.routes;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
-import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.empirefx.fxbo.commonlib.enums.HTTPCommonHeadersEnum.CONTENT_TYPE;
-import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
-
 @Component
-public class GetFXBOIBApplicationRouteBuilder extends RouteBuilder {
+public class GetFXBOIBAppRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
@@ -30,9 +26,9 @@ public class GetFXBOIBApplicationRouteBuilder extends RouteBuilder {
                 .get("/ib-application/{configId}")
                 .description("Adapter REST Service")
                 .produces("application/json")
-                .to("direct:fetchIbApplications");
+                .to("direct:fetchIbApp");
 
-        from("direct:fetchIbApplications").routeId("com.empirefx.request.dispatchRequest300")
+        from("direct:fetchIbApp").routeId("com.empirefx.request.fetchIbApp")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
@@ -41,10 +37,10 @@ public class GetFXBOIBApplicationRouteBuilder extends RouteBuilder {
                 .removeHeaders("CamelHttp*","finalUrl")
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Fetch Trading Platform Servers By ID Endpoint :: Request :: ${header.finaUrl}")
-                .enrich().simple("${header.finaUrl}").id("fetchIbApplications")
-                .to("direct:fetchIbApplicationsResponse");
+                .enrich().simple("${header.finaUrl}").id("fetchIbApps")
+                .to("direct:fetchIbAppResponse");
 
-        from("direct:fetchIbApplicationsResponse")
+        from("direct:fetchIbAppResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming  response: ${body}")
                 .unmarshal().json()
