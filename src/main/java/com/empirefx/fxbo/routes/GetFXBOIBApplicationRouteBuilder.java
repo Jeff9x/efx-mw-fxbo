@@ -30,9 +30,9 @@ public class GetFXBOIBApplicationRouteBuilder extends RouteBuilder {
                 .get("/ib-application/{configId}")
                 .description("Adapter REST Service")
                 .produces("application/json")
-                .to("direct:fetchIbApplication");
+                .to("direct:fetchIbApplications");
 
-        from("direct:fetchIbApplication").routeId("com.empirefx.request.dispatchRequest300")
+        from("direct:fetchIbApplications").routeId("com.empirefx.request.dispatchRequest300")
                 .noStreamCaching().noMessageHistory().noTracing()
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
