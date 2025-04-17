@@ -40,9 +40,9 @@ public class SubmitIBApplicationRouteBuilder extends RouteBuilder {
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Endpoint :: Create Account Request :: {{atomic1.uriSubmitIbApplication}}")
                 .enrich().simple("{{atomic1.uriSubmitIbApplication}}").id("submitIbApplication1")
-                .to("direct:fetchIBApplicationResponse");
+                .to("direct:submitIBApplicationResponse");
 
-        from("direct:fetchIBApplicationResponse")
+        from("direct:submitIBApplicationResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming response: ${body}")
                 .unmarshal().json()
