@@ -41,10 +41,10 @@ public class GetFXBOIBApplicationRouteBuilder extends RouteBuilder {
                 .removeHeaders("CamelHttp*","finalUrl")
                 .doTry()
                 .log(LoggingLevel.INFO, "\n Calling FXBO Fetch Trading Platform Servers By ID Endpoint :: Request :: ${header.finaUrl}")
-                .enrich().simple("${header.finaUrl}").id("callServiceBack3")
-                .to("direct:fetchIbApplicationResponse");
+                .enrich().simple("${header.finaUrl}").id("fetchIbApplications")
+                .to("direct:fetchIbApplicationsResponse");
 
-        from("direct:fetchIbApplicationResponse")
+        from("direct:fetchIbApplicationsResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .log("Incoming  response: ${body}")
                 .unmarshal().json()
