@@ -38,7 +38,7 @@ public class GetFXBOTransactionsRouteBuilder extends RouteBuilder {
 
         from("direct:fetchTransactionsResponse")
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .log("Incoming response: ${body}")
+                .log("Incoming response:  ${body}")
                 .unmarshal().json()
                 .process("successResponseProcessor")
                 .end();
