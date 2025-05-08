@@ -22,6 +22,8 @@ public class SetIbPasswordProcessor implements Processor {
 
         System.out.println("Incoming Request: " + requestBody);
 
+        //Setting default value not being passed by ms
+        requestBody.put("notifyEnabled", false);
 
         // Convert the Map to JSON using ObjectMapper
         String jsonRequestBody = objectMapper.writeValueAsString(requestBody);
