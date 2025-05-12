@@ -1,22 +1,53 @@
-# Use the official OpenJDK Alpine image for Java 17
-FROM openjdk:17
+FROM eclipse-temurin:17-jdk-alpine AS jre-builder
+
+WORKDIR /opt/app
+
+RUN apk update && \
+    apk add --no-cache tar binutils
+
+COPY target/empirefx-fxbo-0.0.1-SNAPSHOT.jar .
+COPY key.json .
+
+RUN jar xvf empirefx-fxbo-0.0.1-SNAPSHOT.jar
+
+RUN jdeps --ignore-missing-deps -q  \
+    --recursive  \
+    --multi-release 17  \
+    --print-module-deps  \
+    --class-path 'BOOT-INF/lib/*'  \
+    empirefx-fxbo-0.0.1-SNAPSHOT.jar > modules.txt
+
+RUN $JAVA_HOME/bin/jlink \
+        --verbose \
+        --add-modules $(cat modules.txt) \
+        --strip-debug \
+        --no-man-pages \
+        --no-header-files \
+        --compress=2 \
+        --output /optimized-jdk-17
+
+FROM alpine:latest 
+
+ENV JAVA_HOME=/opt/jdk/jdk-17
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+COPY --from=jre-builder /optimized-jdk-17 $JAVA_HOME
+
+ARG USER=app
+
+RUN addgroup --system $USER && \
+    adduser --system $USER --ingroup $USER
+
+RUN mkdir /app && chown -R $USER /app
+COPY --chown=$USER:$USER target/empirefx-fxbo-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY --chown=$USER:$USER key.json /app/key.json
+
+WORKDIR /app
+USER $USER
 
 EXPOSE 8080
-#RUN apk --no-cache add curl=8.5.0-r0 && \
-#    addgroup -g 1000 -S piuser && adduser -u 1000 -S piuser -G piuser && \
-#    chown -R piuser:piuser /usr/
 
-#HEALTHCHECK --interval=45s --timeout=15s CMD curl -k --fail https://localhost:8080/actuator/health || exit 1
-#USER piuser
-# Create an application directory
-WORKDIR /usr/src/app
-
-# Copy the JAR file to the container
-COPY target/empirefx-fxbo-0.0.1-SNAPSHOT.jar /usr/src/app/empirefx-fxbo-0.0.1-SNAPSHOT.jar
-COPY key.json /usr/src/app/key.json
-# Set environment variables (optional)
 ENV JAVA_OPTS=""
 
-# Command to run the JAR file
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /usr/src/app/empirefx-fxbo-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
 
