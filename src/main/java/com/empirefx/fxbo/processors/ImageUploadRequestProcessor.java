@@ -101,7 +101,7 @@ public class ImageUploadRequestProcessor implements Processor {
             byte[] imageBytes = downloadImage(filePath);
 
             File file = null;
-            if (Objects.equals(type, "National ID") && Objects.equals(fileName, "FRONT_SIDE")) {
+            if (Objects.equals(type, "National ID") || Objects.equals(type, "Passport")&& Objects.equals(fileName, "FRONT_SIDE")) {
                 // File object pointing to the output file
                 file = new File("front_side.png");
 
@@ -141,7 +141,7 @@ public class ImageUploadRequestProcessor implements Processor {
 //            byte[] imageBytesBack = downloadImageFromGoogleUrl(filePathBack);
 
             File fileback = null;
-            if (Objects.equals(type, "National ID") && Objects.equals(fileNameBack, "BACK_SIDE")) {
+            if (Objects.equals(type, "National ID") || Objects.equals(type, "Passport")&& Objects.equals(fileNameBack, "BACK_SIDE")) {
                 // File object pointing to the output file
                 fileback = new File("back_side.png");
 
