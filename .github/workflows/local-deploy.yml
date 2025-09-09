@@ -52,15 +52,9 @@ jobs:
       # Step 5: Deploy the application to your running Minikube cluster
       - name: Deploy to Minikube
         run: |
-          echo "--- Starting Deployment ---"
-          # Create the namespace if it doesn't already exist
-          kubectl create namespace ${{ env.KUBE_NAMESPACE }} || echo "Namespace '${{ env.KUBE_NAMESPACE }}' already exists."
-
-          # Apply your Kubernetes configuration files
-          # IMPORTANT: Your deployment.yaml must use 'imagePullPolicy: IfNotPresent' or 'Never'
+          try { kubectl create namespace ${{ env.KUBE_NAMESPACE }}
+          }  catch {Write-Host "Namespace '${{ env.KUBE_NAMESPACE }}' likely already exists. Continuing..."
+          }
           kubectl apply -f ./efx-mw-fxbo/k8s/deployment.yaml -n ${{ env.KUBE_NAMESPACE }}
           kubectl apply -f ./efx-mw-fxbo/k8s/service.yaml -n ${{ env.KUBE_NAMESPACE }}
-
-          # Wait for the deployment to complete successfully
-          echo "--- Verifying Deployment ---"
           kubectl rollout status deployment/efx-mw-fxbo -n ${{ env.KUBE_NAMESPACE }} --timeout=300s
