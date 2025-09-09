@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: efx-mw-fxbo
+  namespace: backend-services
+  labels:
+    app: efx-mw-fxbo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: efx-mw-fxbo
+  template:
+    metadata:
+      labels:
+        app: efx-mw-fxbo
+    spec:
+      containers:
+      - name: efx-mw-fxbo
+        image: efx-mw-fxbo:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - name: JAVA_OPTS
+          value: ""
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        volumeMounts:
+        - name: efx-mw-fxbo-config
+          mountPath: /usr/src/app/main/resources/application.yaml
+          subPath: application.yaml
+      volumes:
+       - name: efx-mw-fxbo-config
+         configMap:
+          name: efx-mw-fxbo-config
+
