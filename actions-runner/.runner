@@ -1,0 +1,11 @@
+﻿{
+  "agentId": 2,
+  "agentName": "DESKTOP-DHIQD23",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus5.actions.githubusercontent.com/KjbxjzQAwpBZgBiR2MJ73YG4lOijmoeESecpLlNNt7MgRo83PB/",
+  "gitHubUrl": "https://github.com/Jeff9x/efx-mw-fxbo",
+  "workFolder": "_work",
+  "useV2Flow": true,
+  "serverUrlV2": "https://broker.actions.githubusercontent.com/"
+}
