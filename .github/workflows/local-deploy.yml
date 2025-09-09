@@ -40,7 +40,6 @@ jobs:
       #ADDED STEP: Create a dummy key.json file for the local build
       - name: Create dummy key.json for local build
         run: echo "{}" > key.json
-        shell: bash
 
         # Step 4: Build the Docker image directly inside your running Minikube's environment
       - name: Build image in Minikube's Docker daemon
