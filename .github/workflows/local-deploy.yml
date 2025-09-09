@@ -1,64 +1,66 @@
-# Workflow name
+Workflow name
 name: Build and Deploy to Local Minikube
 
-# Run this workflow on every push to the 'main' branch or when triggered manually
+#This workflow runs on every push to the 'main' branch or when triggered manually
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+push:
+branches:
+- main
+workflow_dispatch:
 
-# Environment variables used throughout the workflow
+#Environment variables used throughout the workflow
 env:
-  IMAGE_NAME: efx-mw-fxbo
-  KUBE_NAMESPACE: backend-services
+IMAGE_NAME: efx-mw-fxbo
+KUBE_NAMESPACE: backend-services
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy Locally
-    # IMPORTANT: This now runs on a self-hosted runner on your local machine.
-    runs-on: self-hosted
+build-and-deploy:
+name: Build and Deploy Locally
+# This job runs on a self-hosted runner on your local machine.
+runs-on: self-hosted
 
-    steps:
-      # Step 1: Get your code from the repository
-      - name: Checkout repository
-        uses: actions/checkout@v4
+steps:
+  # Step 1: Get your code from the repository
+  - name: Checkout repository
+    uses: actions/checkout@v4
 
-      # Step 2: Set up JDK 17 for compiling the application
-      # This uses a local Java installation if available, or downloads it.
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'adopt'
+  # Step 2: Set up JDK 17 for compiling the application
+  - name: Set up JDK 17
+    uses: actions/setup-java@v3
+    with:
+      java-version: '17'
+      distribution: 'adopt'
 
-      # Step 3: Compile the Java application using Maven
-      # This runs on your local machine.
-      - name: Compile with Maven
-        run: mvn clean install
+  # Step 3: Compile the Java application using Maven
+  - name: Compile with Maven
+    run: mvn clean install
 
-      # Step 4: Build the Docker image directly inside your running Minikube's environment
-      - name: Build image in Minikube's Docker daemon
-        run: |
-          # Point the shell's docker-cli to your running Minikube's docker-daemon
-           minikube docker-env | Invoke-Expression
-          # Build the image; it will now be available inside your Minikube cluster
-          docker build -t ${{ env.IMAGE_NAME }}:latest .
+  # ADDED STEP: Create a dummy key.json file for the local build
+  # This step satisfies the 'COPY key.json' command in your Dockerfile.
+  - name: Create dummy key.json for local build
+    run: echo "{}" > key.json
+    shell: bash
 
-      # Step 5: Deploy the application to your running Minikube cluster
-      - name: Deploy to Minikube
-        run: |
-          echo "--- Starting Deployment ---"
-          # Create the namespace if it doesn't already exist
-          kubectl create namespace ${{ env.KUBE_NAMESPACE }} || echo "Namespace '${{ env.KUBE_NAMESPACE }}' already exists."
+  # Step 4: Build the Docker image directly inside your running Minikube's environment
+  - name: Build image in Minikube's Docker daemon
+    run: |
+      # Point the shell's docker-cli to your running Minikube's docker-daemon
+      minikube docker-env | Invoke-Expression
+      # Build the image; it will now be available inside your Minikube cluster
+      docker build -t ${{ env.IMAGE_NAME }}:latest .
 
-          # Apply your Kubernetes configuration files
-          # IMPORTANT: Your deployment.yaml must use 'imagePullPolicy: IfNotPresent' or 'Never'
-          kubectl apply -f ./efx-mw-fxbo/k8s/deployment.yaml -n ${{ env.KUBE_NAMESPACE }}
-          kubectl apply -f ./efx-mw-fxbo/k8s/service.yaml -n ${{ env.KUBE_NAMESPACE }}
+  # Step 5: Deploy the application to your running Minikube cluster
+  - name: Deploy to Minikube
+    run: |
+      echo "--- Starting Deployment ---"
+      # Create the namespace if it doesn't already exist
+      kubectl create namespace ${{ env.KUBE_NAMESPACE }} || echo "Namespace '${{ env.KUBE_NAMESPACE }}' already exists."
 
-          # Wait for the deployment to complete successfully
-          echo "--- Verifying Deployment ---"
-          kubectl rollout status deployment/efx-mw-fxbo -n ${{ env.KUBE_NAMESPACE }} --timeout=300s
+      # Apply your Kubernetes configuration files
+      # IMPORTANT: Your deployment.yaml must use 'imagePullPolicy: IfNotPresent' or 'Never'
+      kubectl apply -f ./efx-mw-fxbo/k8s/deployment.yaml -n ${{ env.KUBE_NAMESPACE }}
+      kubectl apply -f ./efx-mw-fxbo/k8s/service.yaml -n ${{ env.KUBE_NAMESPACE }}
 
-
+      # Wait for the deployment to complete successfully
+      echo "--- Verifying Deployment ---"
+      kubectl rollout status deployment/efx-mw-fxbo -n ${{ env.KUBE_NAMESPACE }} --timeout=300s
