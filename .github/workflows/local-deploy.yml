@@ -41,7 +41,7 @@ jobs:
       - name: Build image in Minikube's Docker daemon
         run: |
           # Point the shell's docker-cli to your running Minikube's docker-daemon
-          eval $(minikube -p minikube docker-env)
+           minikube docker-env | Invoke-Expression
           # Build the image; it will now be available inside your Minikube cluster
           docker build -t ${{ env.IMAGE_NAME }}:latest .
 
