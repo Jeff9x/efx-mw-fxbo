@@ -50,11 +50,12 @@ jobs:
           docker build -t ${{ env.IMAGE_NAME }}:latest .
 
       # Step 5: Deploy the application to your running Minikube cluster
-      - name: Deploy to Minikube
-        run: |
-          try { kubectl create namespace ${{ env.KUBE_NAMESPACE }}
-          }  catch {Write-Host "Namespace '${{ env.KUBE_NAMESPACE }}' likely already exists. Continuing..."
+      - run: |
+          try {
+          kubectl create namespace ${{ env.KUBE_NAMESPACE }}
+          } catch {
+          Write-Host "Namespace '${{ env.KUBE_NAMESPACE }}' likely already exists. Continuing..."
           }
-          kubectl apply -f ./efx-mw-fxbo/k8s/deployment.yaml -n ${{ env.KUBE_NAMESPACE }}
-          kubectl apply -f ./efx-mw-fxbo/k8s/service.yaml -n ${{ env.KUBE_NAMESPACE }}
+          kubectl apply -f ./k8s/deployment.yaml -n ${{ env.KUBE_NAMESPACE }}
+          kubectl apply -f ./k8s/service.yaml -n ${{ env.KUBE_NAMESPACE }}
           kubectl rollout status deployment/efx-mw-fxbo -n ${{ env.KUBE_NAMESPACE }} --timeout=300s
