@@ -28,3 +28,4 @@ target/
 .settings/
 target
 /zenz-ng-send-sms-otp.iml
+actions-runner/
