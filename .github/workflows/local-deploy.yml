@@ -49,7 +49,7 @@ jobs:
           # Build the image; it will now be available inside your Minikube cluster
           docker build -t ${{ env.IMAGE_NAME }}:latest .
 
-      # Step 5.1: Deploy the application to your running Minikube cluster
+      # Step 5: Deploy the application to your running Minikube cluster
       - run: |
           kubectl apply -f ./k8s/deployment.yaml -n ${{ env.KUBE_NAMESPACE }}
           kubectl apply -f ./k8s/service.yaml -n ${{ env.KUBE_NAMESPACE }}
